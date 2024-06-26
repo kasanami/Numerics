@@ -164,6 +164,14 @@ namespace Ksnm.Numerics
         /// <summary>
         /// 指定した値で初期化
         /// </summary>
+        public BigDecimal(Half value)
+        {
+            var temp = value.ToString(DecimalFormat);
+            this = Parse(temp);
+        }
+        /// <summary>
+        /// 指定した値で初期化
+        /// </summary>
         public BigDecimal(double value)
         {
             var temp = value.ToString(DecimalFormat);
@@ -362,14 +370,14 @@ namespace Ksnm.Numerics
         /// </summary>
         public static implicit operator BigDecimal(byte value)
         {
-            return new BigDecimal(value);
+            return new BigDecimal((int)value);
         }
         /// <summary>
         /// sbyte から BigDecimal への暗黙的な変換を定義します。
         /// </summary>
         public static implicit operator BigDecimal(sbyte value)
         {
-            return new BigDecimal(value);
+            return new BigDecimal((int)value);
         }
         /// <summary>
         /// short から BigDecimal への暗黙的な変換を定義します。
@@ -410,6 +418,27 @@ namespace Ksnm.Numerics
         /// ulong から BigDecimal への暗黙的な変換を定義します。
         /// </summary>
         public static implicit operator BigDecimal(ulong value)
+        {
+            return new BigDecimal(value);
+        }
+        /// <summary>
+        /// Int128 から BigDecimal への暗黙的な変換を定義します。
+        /// </summary>
+        public static implicit operator BigDecimal(Int128 value)
+        {
+            return new BigDecimal(value);
+        }
+        /// <summary>
+        /// UInt128 から BigDecimal への暗黙的な変換を定義します。
+        /// </summary>
+        public static implicit operator BigDecimal(UInt128 value)
+        {
+            return new BigDecimal(value);
+        }
+        /// <summary>
+        /// Half から BigDecimal への明示的な変換を定義します。
+        /// </summary>
+        public static explicit operator BigDecimal(Half value)
         {
             return new BigDecimal(value);
         }
@@ -512,6 +541,13 @@ namespace Ksnm.Numerics
         public static explicit operator UInt128(BigDecimal value)
         {
             return value.ToUInt128();
+        }
+        /// <summary>
+        /// BigDecimal から Half への明示的な変換を定義します。
+        /// </summary>
+        public static explicit operator Half(BigDecimal value)
+        {
+            return (Half)value.ToDecimal();
         }
         /// <summary>
         /// BigDecimal から float への明示的な変換を定義します。
@@ -977,21 +1013,6 @@ namespace Ksnm.Numerics
             return value;
         }
 
-        public static BigDecimal Create<TOther>(TOther value) where TOther : INumber<TOther>
-        {
-            throw new NotImplementedException();
-        }
-
-        public static BigDecimal CreateSaturating<TOther>(TOther value) where TOther : INumber<TOther>
-        {
-            throw new NotImplementedException();
-        }
-
-        public static BigDecimal CreateTruncating<TOther>(TOther value) where TOther : INumber<TOther>
-        {
-            throw new NotImplementedException();
-        }
-
         public static (BigDecimal Quotient, BigDecimal Remainder) DivRem(BigDecimal left, BigDecimal right)
         {
             throw new NotImplementedException();
@@ -1061,6 +1082,16 @@ namespace Ksnm.Numerics
         }
 
         public static bool TryParse([NotNullWhen(true)] string s, IFormatProvider provider, out BigDecimal result)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out decimal result)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out decimal result)
         {
             throw new NotImplementedException();
         }
@@ -1604,7 +1635,7 @@ namespace Ksnm.Numerics
             return TryConvertFrom(value, out result);
         }
 
-    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result)
+        static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result)
         {
             return TryConvertFrom(value, out result);
         }
@@ -1663,7 +1694,65 @@ namespace Ksnm.Numerics
 
         static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, out TOther result)
         {
-            throw new NotImplementedException();
+            if (typeof(TOther) == typeof(double))
+            {
+                double actualResult = checked((double)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Half))
+            {
+                Half actualResult = checked((Half)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(short))
+            {
+                short actualResult = checked((short)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(int))
+            {
+                int actualResult = checked((int)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(long))
+            {
+                long actualResult = checked((long)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Int128))
+            {
+                Int128 actualResult = checked((Int128)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nint))
+            {
+                nint actualResult = checked((nint)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(sbyte))
+            {
+                sbyte actualResult = checked((sbyte)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(float))
+            {
+                float actualResult = checked((float)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
         }
 
         static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, out TOther result)
