@@ -1039,7 +1039,7 @@ namespace Ksnm.Numerics
 
         public static BigDecimal Parse(string s, NumberStyles style, IFormatProvider provider)
         {
-            if (style == NumberStyles.None || 
+            if (style == NumberStyles.None ||
                 style == NumberStyles.Integer)
             {
                 return Parse(s.ToString(), provider);
@@ -1104,17 +1104,24 @@ namespace Ksnm.Numerics
 
         public int CompareTo(object obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+            {
+                return 1;
+            }
+            if (obj is BigDecimal)
+            {
+                return CompareTo((BigDecimal)obj);
+            }
+            throw new ArgumentException("オブジェクトはBigDecimal型でなければなりません。");
         }
 
         public int CompareTo(BigDecimal? other)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Equals(BigDecimal? other)
-        {
-            throw new NotImplementedException();
+            if (other != null)
+            {
+                return Compare(this, other.Value);
+            }
+            return 1;
         }
 
         #region IFormattable
@@ -1289,15 +1296,27 @@ namespace Ksnm.Numerics
         }
         #endregion operator
 
+        #region IComparable
         public int CompareTo(BigDecimal other)
         {
             return Compare(this, other);
         }
+        #endregion IComparable
 
+        #region IEquatable
         public bool Equals(BigDecimal other)
         {
             return Equals(this, other);
         }
+        public bool Equals(BigDecimal? other)
+        {
+            if (other != null)
+            {
+                return Equals(other.Value);
+            }
+            return false;
+        }
+        #endregion IEquatable
         #endregion INumber<BigDecimal>
 
         #region 補助
