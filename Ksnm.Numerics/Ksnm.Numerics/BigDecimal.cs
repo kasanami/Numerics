@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using static System.Diagnostics.Debug;
 
 namespace Ksnm.Numerics
@@ -301,8 +302,13 @@ namespace Ksnm.Numerics
         /// <returns>指定されている数値と等価の値。</returns>
         public static BigDecimal Parse(string value)
         {
+            return Parse(value, NumberFormatInfo.CurrentInfo);
+        }
+        public static BigDecimal Parse(string value, NumberFormatInfo numberFormatInfo)
+        {
             var temp = Zero;
-            var pointIindex = value.IndexOf('.');
+            string numberDecimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+            var pointIindex = value.IndexOf(numberDecimalSeparator);
             if (pointIindex < 0)
             {
                 temp.Mantissa = BigInteger.Parse(value);
@@ -1013,11 +1019,6 @@ namespace Ksnm.Numerics
             return value;
         }
 
-        public static (BigDecimal Quotient, BigDecimal Remainder) DivRem(BigDecimal left, BigDecimal right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigDecimal Max(BigDecimal x, BigDecimal y)
         {
             if (x > y)
@@ -1038,22 +1039,27 @@ namespace Ksnm.Numerics
 
         public static BigDecimal Parse(string s, NumberStyles style, IFormatProvider provider)
         {
-            throw new NotImplementedException();
+            if (style == NumberStyles.None || 
+                style == NumberStyles.Integer)
+            {
+                return Parse(s.ToString(), provider);
+            }
+            throw new NotSupportedException($"{nameof(style)}={style}");
         }
 
         public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider provider)
         {
-            throw new NotImplementedException();
+            return Parse(s.ToString(), style, provider);
         }
 
         public static BigDecimal Parse(ReadOnlySpan<char> s, IFormatProvider provider)
         {
-            throw new NotImplementedException();
+            return Parse(s.ToString(), provider);
         }
 
         public static BigDecimal Parse(string s, IFormatProvider provider)
         {
-            throw new NotImplementedException();
+            return Parse(s, NumberFormatInfo.GetInstance(provider));
         }
 
         public static BigDecimal Sign(BigDecimal value)
@@ -1111,15 +1117,19 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
+        #region IFormattable
         public string ToString(string format, IFormatProvider formatProvider)
         {
             throw new NotImplementedException();
         }
+        #endregion IFormattable
 
+        #region ISpanFormattable
         public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
         {
             throw new NotImplementedException();
         }
+        #endregion ISpanFormattable
 
         #region operator
         public static BigDecimal operator +(BigDecimal value)
@@ -1279,21 +1289,6 @@ namespace Ksnm.Numerics
         }
         #endregion operator
 
-#pragma warning disable CS8765 // パラメーターの型の NULL 値の許容が、オーバーライドされたメンバーと一致しません。おそらく、NULL 値の許容の属性が原因です。
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-            if (obj is BigDecimal)
-            {
-                return Equals((BigDecimal)obj);
-            }
-            return false;
-        }
-#pragma warning restore CS8765 // パラメーターの型の NULL 値の許容が、オーバーライドされたメンバーと一致しません。おそらく、NULL 値の許容の属性が原因です。
-
         public int CompareTo(BigDecimal other)
         {
             return Compare(this, other);
@@ -1303,15 +1298,7 @@ namespace Ksnm.Numerics
         {
             return Equals(this, other);
         }
-
-        public override int GetHashCode()
-        {
-            MinimizeMantissa();
-            return Mantissa.GetHashCode() ^ Exponent.GetHashCode();
-        }
-
         #endregion INumber<BigDecimal>
-
 
         #region 補助
         /// <summary>
@@ -1766,5 +1753,63 @@ namespace Ksnm.Numerics
         }
 
         #endregion INumberBase
+
+        #region object
+        /// <summary>
+        /// 現在のインスタンスの値と指定されたオブジェクトの値が等しいかどうかを示す値を返します。
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (obj is BigDecimal)
+            {
+                return Equals((BigDecimal)obj);
+            }
+            return false;
+        }
+        /// <summary>
+        /// このインスタンスのハッシュ コードを返します。
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Mantissa.GetHashCode() ^ Exponent.GetHashCode();
+        }
+        /// <summary>
+        /// このインスタンスの数値を、それと等価な文字列形式に変換します。
+        /// </summary>
+        public override string ToString()
+        {
+#if true
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(Mantissa.ToString());
+            if (Exponent > 0)
+            {
+                stringBuilder.Append(new string('0', Exponent));
+            }
+            else if (Exponent < 0)
+            {
+                var offset = (Mantissa < 0) ? 1 : 0;
+                var e = -Exponent;
+                var length = stringBuilder.Length - offset;
+                if (e < length)
+                {
+                    stringBuilder.Insert(stringBuilder.Length - e, '.');
+                }
+                else
+                {
+                    var zeroCount = e - length + 1;
+                    stringBuilder.Insert(offset, new string('0', zeroCount));
+                    stringBuilder.Insert(offset + 1, '.');
+                }
+            }
+            return stringBuilder.ToString();
+#else
+            return $"({Mantissa}*10^{Exponent})";
+#endif
+        }
+        #endregion object
     }
 }

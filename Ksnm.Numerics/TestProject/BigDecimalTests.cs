@@ -1,5 +1,6 @@
 using Ksnm.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Numerics;
 
 namespace TestProject
 {
@@ -61,6 +62,41 @@ namespace TestProject
             Assert.AreEqual(-1, BigDecimal.Parse("-1"));
             Assert.AreEqual(10000000000, BigDecimal.Parse("10000000000"));
             Assert.AreEqual(0.0000000001m, BigDecimal.Parse("0.0000000001"));
+        }
+
+        [TestMethod()]
+        public void ParseTest2()
+        {
+            for (decimal source = -100; source <= 100; source += 0.5m)
+            {
+                var str = source.ToString();
+                var sample = BigDecimal.Parse(str);
+                Assert.AreEqual(source, sample, $"{source}");
+            }
+            {
+                var source = "3.14159265358979323846264338327950288";
+                var sample = BigDecimal.Parse(source);
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(BigInteger.Parse("314159265358979323846264338327950288"), sample.Mantissa, $"{source}");
+                Assert.AreEqual(-35, sample.Exponent, $"{source}");
+                Assert.AreEqual(-35, sample.MinExponent, $"{source}");
+            }
+            {
+                var source = "0.1234567890123456789012345678901234567890";
+                var sample = BigDecimal.Parse(source);
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(BigInteger.Parse("1234567890123456789012345678901234567890"), sample.Mantissa, $"{source}");
+                Assert.AreEqual(-40, sample.Exponent, $"{source}");
+                Assert.AreEqual(-40, sample.MinExponent, $"{source}");
+            }
+            {
+                var source = "-0.123456789";
+                var sample = BigDecimal.Parse(source);
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(-123456789, sample.Mantissa, $"{source}");
+                Assert.AreEqual(-9, sample.Exponent, $"{source}");
+                Assert.AreEqual(-28, sample.MinExponent, $"{source}");
+            }
         }
     }
 }
