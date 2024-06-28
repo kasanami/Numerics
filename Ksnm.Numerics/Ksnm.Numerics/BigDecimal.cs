@@ -1038,8 +1038,16 @@ namespace Ksnm.Numerics
             return y;
         }
 
-        public static BigDecimal Parse(string s, NumberStyles style, IFormatProvider provider)
+        public static BigDecimal Parse(string? s, NumberStyles style, IFormatProvider? provider)
         {
+            if(s == null)
+            {
+                throw new ArgumentNullException(nameof(s));
+            }
+            if (provider == null)
+            {
+                throw new ArgumentNullException(nameof(provider));
+            }
             if (style == NumberStyles.None ||
                 style == NumberStyles.Integer)
             {
@@ -1048,17 +1056,21 @@ namespace Ksnm.Numerics
             throw new NotSupportedException($"{nameof(style)}={style}");
         }
 
-        public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider provider)
+        public static BigDecimal Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
         {
             return Parse(s.ToString(), style, provider);
         }
 
-        public static BigDecimal Parse(ReadOnlySpan<char> s, IFormatProvider provider)
+        public static BigDecimal Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
         {
+            if (provider == null)
+            {
+                throw new ArgumentNullException(nameof(provider));
+            }
             return Parse(s.ToString(), provider);
         }
 
-        public static BigDecimal Parse(string s, IFormatProvider provider)
+        public static BigDecimal Parse(string s, IFormatProvider? provider)
         {
             return Parse(s, NumberFormatInfo.GetInstance(provider));
         }
@@ -1121,31 +1133,31 @@ namespace Ksnm.Numerics
             return true;
         }
 
-        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider provider, out BigDecimal result)
+        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out BigDecimal result)
         {
             return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
         }
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out BigDecimal result)
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out BigDecimal result)
         {
             return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
         }
 
-        public static bool TryParse([NotNullWhen(true)] string s, IFormatProvider provider, out BigDecimal result)
+        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, out BigDecimal result)
         {
-            return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
+            return TryParse(s, NumberStyles.Number, provider, out result);
         }
         #endregion TryParse
 
         #region IFormattable
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
         {
             throw new NotImplementedException();
         }
         #endregion IFormattable
 
         #region ISpanFormattable
-        public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+        public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         {
             throw new NotImplementedException();
         }
@@ -1810,7 +1822,7 @@ namespace Ksnm.Numerics
         /// <summary>
         /// 現在のインスタンスの値と指定されたオブジェクトの値が等しいかどうかを示す値を返します。
         /// </summary>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
             {
