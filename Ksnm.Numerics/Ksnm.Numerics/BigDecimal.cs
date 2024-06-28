@@ -1062,9 +1062,9 @@ namespace Ksnm.Numerics
             return Parse(s, NumberFormatInfo.GetInstance(provider));
         }
 
-        public static BigDecimal Sign(BigDecimal value)
+        public static int Sign(BigDecimal d)
         {
-            throw new NotImplementedException();
+            return d.Mantissa.Sign;
         }
 
         public static bool TryCreate<TOther>(TOther value, out BigDecimal result) where TOther : INumber<TOther>
