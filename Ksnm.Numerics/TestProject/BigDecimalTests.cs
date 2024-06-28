@@ -124,5 +124,15 @@ namespace TestProject
                 Assert.AreEqual(d1.CompareTo(null), sample1.CompareTo(null), $"{d1}");
             }
         }
+
+
+        [TestMethod()]
+        public void SignTest()
+        {
+            BigDecimal sample = 1;
+            Assert.AreEqual(+1, BigDecimal.Sign(sample));
+            sample = -1;
+            Assert.AreEqual(-1, BigDecimal.Sign(sample));
+        }
     }
 }
