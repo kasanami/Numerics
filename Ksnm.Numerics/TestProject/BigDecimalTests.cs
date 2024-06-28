@@ -170,6 +170,25 @@ namespace TestProject
 
 
         [TestMethod()]
+        public void SortTest()
+        {
+            List<BigDecimal> sample = new List<BigDecimal>();
+            for(int  i = 0; i < 10; i++)
+            {
+                var num = Random.Shared.Next(100);
+                sample.Add(num);
+            }
+            // ソート
+            sample.Sort();
+            // 大小関係チェック
+            for (int i = 0; i < sample.Count-1; i++)
+            {
+                Assert.IsTrue(sample[i] <= sample[i + 1]);
+            }
+        }
+
+
+        [TestMethod()]
         public void SignTest()
         {
             BigDecimal sample = 1;

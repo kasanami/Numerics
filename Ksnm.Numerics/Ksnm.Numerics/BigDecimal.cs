@@ -1137,28 +1137,6 @@ namespace Ksnm.Numerics
         }
         #endregion TryParse
 
-        public int CompareTo(object obj)
-        {
-            if (obj == null)
-            {
-                return 1;
-            }
-            if (obj is BigDecimal)
-            {
-                return CompareTo((BigDecimal)obj);
-            }
-            throw new ArgumentException("オブジェクトはBigDecimal型でなければなりません。");
-        }
-
-        public int CompareTo(BigDecimal? other)
-        {
-            if (other != null)
-            {
-                return Compare(this, other.Value);
-            }
-            return 1;
-        }
-
         #region IFormattable
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -1335,6 +1313,26 @@ namespace Ksnm.Numerics
         public int CompareTo(BigDecimal other)
         {
             return Compare(this, other);
+        }
+        public int CompareTo(object? obj)
+        {
+            if (obj == null)
+            {
+                return 1;
+            }
+            if (obj is BigDecimal)
+            {
+                return CompareTo((BigDecimal)obj);
+            }
+            throw new ArgumentException("オブジェクトはBigDecimal型でなければなりません。");
+        }
+        public int CompareTo(BigDecimal? other)
+        {
+            if (other != null)
+            {
+                return Compare(this, other.Value);
+            }
+            return 1;
         }
         #endregion IComparable
 
