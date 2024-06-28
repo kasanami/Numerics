@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using static System.Diagnostics.Debug;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ksnm.Numerics
 {
@@ -1072,35 +1073,69 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        public static bool TryParse([NotNullWhen(true)] string s, NumberStyles style, IFormatProvider provider, out BigDecimal result)
+        #region TryParse
+        public static bool TryParse([NotNullWhen(true)] string? s, [MaybeNullWhen(false)] out BigDecimal result)
         {
-            throw new NotImplementedException();
+            if (s == null )
+            {
+                result = 0;
+                return false;
+            }
+            try
+            {
+                result = BigDecimal.Parse(s);
+            }
+            catch (FormatException)
+            {
+                result = 0;
+                return false;
+            }
+            catch (OverflowException)
+            {
+                result = 0;
+                return false;
+            }
+            return true;
+        }
+        public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BigDecimal result)
+        {
+            if (s == null || provider == null)
+            {
+                result = 0;
+                return false;
+            }
+            try
+            {
+                result = BigDecimal.Parse(s, style, provider);
+            }
+            catch (FormatException)
+            {
+                result = 0;
+                return false;
+            }
+            catch (OverflowException)
+            {
+                result = 0;
+                return false;
+            }
+            return true;
         }
 
         public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider provider, out BigDecimal result)
         {
-            throw new NotImplementedException();
+            return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
         }
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out BigDecimal result)
         {
-            throw new NotImplementedException();
+            return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
         }
 
         public static bool TryParse([NotNullWhen(true)] string s, IFormatProvider provider, out BigDecimal result)
         {
-            throw new NotImplementedException();
+            return TryParse(s.ToString(), NumberStyles.Number, provider, out result);
         }
-
-        public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, out decimal result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out decimal result)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion TryParse
 
         public int CompareTo(object obj)
         {

@@ -99,6 +99,49 @@ namespace TestProject
             }
         }
 
+        [TestMethod()]
+        public void TryParseTest2()
+        {
+            for (decimal source = -100; source <= 100; source += 0.5m)
+            {
+                var str = source.ToString();
+                BigDecimal sample;
+                var isSuccess = BigDecimal.TryParse(str, out sample);
+                Assert.IsTrue(isSuccess, $"{source}");
+                Assert.AreEqual(source, sample, $"{source}");
+            }
+            {
+                var source = "3.14159265358979323846264338327950288";
+                BigDecimal sample;
+                var isSuccess = BigDecimal.TryParse(source, out sample);
+                Assert.IsTrue(isSuccess, $"{source}");
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(BigInteger.Parse("314159265358979323846264338327950288"), sample.Mantissa, $"{source}");
+                Assert.AreEqual(-35, sample.Exponent, $"{source}");
+                Assert.AreEqual(-35, sample.MinExponent, $"{source}");
+            }
+            {
+                var source = "0.1234567890123456789012345678901234567890";
+                BigDecimal sample;
+                var isSuccess = BigDecimal.TryParse(source, out sample);
+                Assert.IsTrue(isSuccess, $"{source}");
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(BigInteger.Parse("1234567890123456789012345678901234567890"), sample.Mantissa, $"{source}");
+                Assert.AreEqual(-40, sample.Exponent, $"{source}");
+                Assert.AreEqual(-40, sample.MinExponent, $"{source}");
+            }
+            {
+                var source = "-0.123456789";
+                BigDecimal sample;
+                var isSuccess = BigDecimal.TryParse(source, out sample);
+                Assert.IsTrue(isSuccess, $"{source}");
+                Assert.AreEqual(source, sample.ToString(), $"{source}");
+                Assert.AreEqual(-123456789, sample.Mantissa, $"{source}");
+                Assert.AreEqual(-9, sample.Exponent, $"{source}");
+                Assert.AreEqual(-28, sample.MinExponent, $"{source}");
+            }
+        }
+
 
         [TestMethod()]
         public void CompareToTest()
