@@ -1040,7 +1040,7 @@ namespace Ksnm.Numerics
 
         public static BigDecimal Parse(string? s, NumberStyles style, IFormatProvider? provider)
         {
-            if(s == null)
+            if (s == null)
             {
                 throw new ArgumentNullException(nameof(s));
             }
@@ -1080,15 +1080,10 @@ namespace Ksnm.Numerics
             return d.Mantissa.Sign;
         }
 
-        public static bool TryCreate<TOther>(TOther value, out BigDecimal result) where TOther : INumber<TOther>
-        {
-            throw new NotImplementedException();
-        }
-
         #region TryParse
         public static bool TryParse([NotNullWhen(true)] string? s, [MaybeNullWhen(false)] out BigDecimal result)
         {
-            if (s == null )
+            if (s == null)
             {
                 result = 0;
                 return false;
@@ -1806,16 +1801,84 @@ namespace Ksnm.Numerics
             }
         }
 
-        static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, out TOther result)
+        static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
         {
-            throw new NotImplementedException();
+            return TryConvertTo(value, out result);
         }
 
-        static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, out TOther result)
+        static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
         {
-            throw new NotImplementedException();
+            return TryConvertTo(value, out result);
         }
 
+        private static bool TryConvertTo<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
+            where TOther : INumberBase<TOther>
+        {
+            if (typeof(TOther) == typeof(double))
+            {
+                double actualResult = (double)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Half))
+            {
+                Half actualResult = (Half)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(short))
+            {
+                short actualResult = (value >= short.MaxValue) ? short.MaxValue :
+                                     (value <= short.MinValue) ? short.MinValue : (short)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(int))
+            {
+                int actualResult = (value >= int.MaxValue) ? int.MaxValue :
+                                   (value <= int.MinValue) ? int.MinValue : (int)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(long))
+            {
+                long actualResult = (value >= long.MaxValue) ? long.MaxValue :
+                                    (value <= long.MinValue) ? long.MinValue : (long)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Int128))
+            {
+                Int128 actualResult = (Int128)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nint))
+            {
+                nint actualResult = (value >= nint.MaxValue) ? nint.MaxValue :
+                                    (value <= nint.MinValue) ? nint.MinValue : (nint)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(sbyte))
+            {
+                sbyte actualResult = (value >= sbyte.MaxValue) ? sbyte.MaxValue :
+                                     (value <= sbyte.MinValue) ? sbyte.MinValue : (sbyte)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(float))
+            {
+                float actualResult = (float)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
+        }
         #endregion INumberBase
 
         #region object
