@@ -717,12 +717,23 @@ namespace Ksnm.Numerics
             return new BigDecimal(quotient);
         }
         /// <summary>
+        /// 除算し、その結果を返します。剰余は出力パラメーターとして返されます。
+        /// 被除数はthis
+        /// </summary>
+        /// <param name="divisor">除数。</param>
+        /// <param name="remainder">このメソッドから制御が戻るときに、除算の剰余を表す System.Numerics.BigInteger 値が格納されます。 このパラメーターは初期化せずに渡されます。</param>
+        /// <returns>除算の商。</returns>
+        /// <exception cref="System.DivideByZeroException">divisor が 0 (ゼロ) です。</exception>
+        public BigDecimal DivRem(BigDecimal divisor, out BigDecimal remainder)
+        {
+            return DivRem(this, divisor, out remainder);
+        }
+        /// <summary>
         /// 指定された値を指数として System.Numerics.BigInteger 値を累乗します。
         /// </summary>
         /// <param name="value">累乗する数値</param>
         /// <param name="exponent">指数</param>
         /// <returns>value を exponent で累乗した結果。</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">exponent が負の値です。</exception>
         public static BigDecimal Pow(BigDecimal value, int exponent)
         {
             if (exponent == 0)
@@ -911,6 +922,10 @@ namespace Ksnm.Numerics
             }
             return value;
         }
+        public BigDecimal Ceiling()
+        {
+            return Ceiling(this);
+        }
         /// <summary>
         /// 負の無限大方向の近似整数に丸めます。
         /// 小数部がない場合は、未変更のまま返されます。
@@ -929,6 +944,10 @@ namespace Ksnm.Numerics
                 }
             }
             return value;
+        }
+        public BigDecimal Floor()
+        {
+            return Floor(this);
         }
         /// <summary>
         /// 指定された数値の平方根を返します。
@@ -1006,6 +1025,10 @@ namespace Ksnm.Numerics
             }
             return value;
         }
+        public BigDecimal Abs()
+        {
+            return Abs(this);
+        }
 
         public static BigDecimal Clamp(BigDecimal value, BigDecimal min, BigDecimal max)
         {
@@ -1036,6 +1059,11 @@ namespace Ksnm.Numerics
                 return x;
             }
             return y;
+        }
+
+        public static BigDecimal Negate(BigDecimal value)
+        {
+            return -value;
         }
 
         public static BigDecimal Parse(string? s, NumberStyles style, IFormatProvider? provider)
@@ -1147,14 +1175,26 @@ namespace Ksnm.Numerics
         #region IFormattable
         public string ToString(string? format, IFormatProvider? formatProvider)
         {
-            throw new NotImplementedException();
+            // TODO:単体テストを動作させるために仮実装
+            return ToString();
         }
         #endregion IFormattable
 
         #region ISpanFormattable
         public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var str = ToString(format.ToString(), provider);
+                str.CopyTo(destination);
+                charsWritten = int.Min(str.Length, destination.Length);
+                return true;
+            }
+            catch
+            {
+                charsWritten = 0;
+                return false;
+            }
         }
         #endregion ISpanFormattable
 
@@ -1272,47 +1312,47 @@ namespace Ksnm.Numerics
 
         static BigDecimal IModulusOperators<BigDecimal, BigDecimal, BigDecimal>.operator %(BigDecimal left, BigDecimal right)
         {
-            throw new NotImplementedException();
+            return left % right;
         }
 
         static BigDecimal IAdditionOperators<BigDecimal, BigDecimal, BigDecimal>.operator +(BigDecimal left, BigDecimal right)
         {
-            throw new NotImplementedException();
+            return left + right;
         }
 
         static BigDecimal IDecrementOperators<BigDecimal>.operator --(BigDecimal value)
         {
-            throw new NotImplementedException();
+            return --value;
         }
 
         static BigDecimal IDivisionOperators<BigDecimal, BigDecimal, BigDecimal>.operator /(BigDecimal left, BigDecimal right)
         {
-            throw new NotImplementedException();
+            return left / right;
         }
 
         static BigDecimal IIncrementOperators<BigDecimal>.operator ++(BigDecimal value)
         {
-            throw new NotImplementedException();
+            return ++value;
         }
 
         static BigDecimal IMultiplyOperators<BigDecimal, BigDecimal, BigDecimal>.operator *(BigDecimal left, BigDecimal right)
         {
-            throw new NotImplementedException();
+            return left * right;
         }
 
         static BigDecimal ISubtractionOperators<BigDecimal, BigDecimal, BigDecimal>.operator -(BigDecimal left, BigDecimal right)
         {
-            throw new NotImplementedException();
+            return left - right;
         }
 
         static BigDecimal IUnaryNegationOperators<BigDecimal, BigDecimal>.operator -(BigDecimal value)
         {
-            throw new NotImplementedException();
+            return -value;
         }
 
         static BigDecimal IUnaryPlusOperators<BigDecimal, BigDecimal>.operator +(BigDecimal value)
         {
-            throw new NotImplementedException();
+            return +value;
         }
         #endregion operator
 

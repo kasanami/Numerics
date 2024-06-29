@@ -17,7 +17,7 @@ namespace TestProject
             Assert.AreEqual(0.5m, (decimal)BigDecimal.ZeroPointFive);
         }
         [TestMethod()]
-        public void AdditionTest()
+        public void OperatorTest()
         {
             {
                 BigDecimal a = 123;
@@ -38,10 +38,7 @@ namespace TestProject
                 BigDecimal c = a + b;
                 Assert.AreEqual(0, c);
             }
-        }
-        [TestMethod()]
-        public void SubtractionTest()
-        {
+            // -
             {
                 BigDecimal a = 123;
                 BigDecimal b = 111;
@@ -53,6 +50,74 @@ namespace TestProject
                 BigDecimal b = decimal.MaxValue;
                 BigDecimal c = a - b;
                 Assert.AreEqual(0, c);
+            }
+            // *
+            {
+                BigDecimal a = 123;
+                BigDecimal b = 100;
+                BigDecimal c = a * b;
+                Assert.AreEqual(12300, c);
+            }
+            {
+                BigDecimal a = 123;
+                BigDecimal b = -100;
+                BigDecimal c = a * b;
+                Assert.AreEqual(-12300, c);
+            }
+            // /
+            {
+                BigDecimal a = 123;
+                BigDecimal b = 100;
+                BigDecimal c = a / b;
+                Assert.AreEqual(1.23m, c);
+            }
+            {
+                BigDecimal a = 123;
+                BigDecimal b = -100;
+                BigDecimal c = a / b;
+                Assert.AreEqual(-1.23m, c);
+            }
+            // %
+            {
+                BigDecimal a = 123;
+                BigDecimal b = 100;
+                BigDecimal c = a % b;
+                Assert.AreEqual(23m, c);
+            }
+            {
+                BigDecimal a = 123;
+                BigDecimal b = -100;
+                BigDecimal c = a % b;
+                Assert.AreEqual(23m, c);
+            }
+            // 符号
+            {
+                BigDecimal a = 123;
+                BigDecimal b = +a;
+                Assert.AreEqual(123, b);
+            }
+            {
+                BigDecimal a = 123;
+                BigDecimal b = -a;
+                Assert.AreEqual(-123, b);
+            }
+            // ++
+            {
+                BigDecimal a = 100;
+                BigDecimal b = ++a;
+                a = 100;
+                BigDecimal c = a++;
+                Assert.AreEqual(101, b);
+                Assert.AreEqual(100, c);
+            }
+            // --
+            {
+                BigDecimal a = 100;
+                BigDecimal b = --a;
+                a = 100;
+                BigDecimal c = a--;
+                Assert.AreEqual(99, b);
+                Assert.AreEqual(100, c);
             }
         }
         [TestMethod()]
@@ -173,7 +238,7 @@ namespace TestProject
         public void SortTest()
         {
             List<BigDecimal> sample = new List<BigDecimal>();
-            for(int  i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var num = Random.Shared.Next(100);
                 sample.Add(num);
@@ -181,12 +246,11 @@ namespace TestProject
             // ソート
             sample.Sort();
             // 大小関係チェック
-            for (int i = 0; i < sample.Count-1; i++)
+            for (int i = 0; i < sample.Count - 1; i++)
             {
                 Assert.IsTrue(sample[i] <= sample[i + 1]);
             }
         }
-
 
         [TestMethod()]
         public void SignTest()
@@ -196,5 +260,53 @@ namespace TestProject
             sample = -1;
             Assert.AreEqual(-1, BigDecimal.Sign(sample));
         }
+
+        [TestMethod()]
+        public void MathTest()
+        {
+            for (decimal i = -10; i <= 10; i += 0.1m)
+            {
+                var sample = new BigDecimal(i);
+                // Abs
+                Assert.AreEqual(decimal.Abs(i), BigDecimal.Abs(sample).ToDecimal(), $"Abs({i})");
+                // Ceiling
+                Assert.AreEqual(decimal.Ceiling(i), BigDecimal.Ceiling(sample).ToDecimal(), $"Ceiling({i})");
+                // Floor
+                Assert.AreEqual(decimal.Floor(i), BigDecimal.Floor(sample).ToDecimal(), $"Floor({i})");
+                // Negate
+                Assert.AreEqual(decimal.Negate(i), BigDecimal.Negate(sample).ToDecimal(), $"Negate({i})");
+                // Truncate
+                Assert.AreEqual(decimal.Truncate(i), BigDecimal.Truncate(sample).ToDecimal(), $"Negate({i})");
+
+                for (decimal j = -10; j <= 10; j += 1m)
+                {
+                    var sample2 = new BigDecimal(j);
+                    // Compare
+                    Assert.AreEqual<BigDecimal>(decimal.Compare(i, j), BigDecimal.Compare(sample, sample2));
+                    // Max
+                    Assert.AreEqual<BigDecimal>(decimal.Max(i, j), BigDecimal.Max(sample, sample2));
+                    // Min
+                    Assert.AreEqual<BigDecimal>(decimal.Min(i, j), BigDecimal.Min(sample, sample2));
+                }
+            }
+
+            {
+                BigDecimal dividend = 123.456m;
+                BigDecimal divisor = 10m;
+                BigDecimal remainder;
+                BigDecimal quotient = BigDecimal.DivRem(dividend, divisor, out remainder);
+                Assert.AreEqual<BigDecimal>(12m, quotient, $"{dividend} / {divisor}");
+                Assert.AreEqual<BigDecimal>(3.456m, remainder, $"{dividend} % {divisor}");
+            }
+            {
+                BigDecimal dividend = 1.234m;
+                BigDecimal divisor = 10m;
+                BigDecimal remainder;
+                BigDecimal quotient = BigDecimal.DivRem(dividend, divisor, out remainder);
+                Assert.AreEqual<BigDecimal>(0m, quotient, $"{dividend} / {divisor}");
+                Assert.AreEqual<BigDecimal>(1.234m, remainder, $"{dividend} % {divisor}");
+            }
+        }
+
     }
 }
