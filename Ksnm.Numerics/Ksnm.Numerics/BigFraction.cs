@@ -154,8 +154,8 @@ namespace Ksnm.Numerics
         #region 型変換
 
         #region 他の型→BigDecimal
-        public static implicit operator Fraction(UInt8 value)=>new Fraction((int)value);
-        public static implicit operator Fraction(Int8 value)=> new Fraction((int)value);
+        public static implicit operator Fraction(Int8 value) => new Fraction((int)value);
+        public static implicit operator Fraction(UInt8 value)=> new Fraction((int)value);
         public static implicit operator Fraction(Int16 value) => new Fraction(value);
         public static implicit operator Fraction(UInt16 value) => new Fraction(value);
         public static implicit operator Fraction(Int32 value) => new Fraction(value);
