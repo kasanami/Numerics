@@ -79,7 +79,7 @@ namespace Ksnm.Numerics
         /// </summary>
         public static int GetExponent(this Float value)
         {
-            return _GetExponent(value._ToBits());
+            return _GetExponent(value._ToBits()) - MantissaLength;
         }
         /// <summary>
         /// 仮数部を取得
@@ -157,10 +157,6 @@ namespace Ksnm.Numerics
         private static UInt _GetMantissa(UInt bits)
         {
             var mantissaBits = _GetMantissaBits(bits);
-            if (mantissaBits == 0)
-            {
-                return 1;
-            }
             // ((UInt)1 << MantissaLength)は"1."を意味する
             return mantissaBits | ((UInt)1 << MantissaLength);
         }

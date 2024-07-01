@@ -39,7 +39,7 @@ namespace Ksnm.Numerics
         #endregion プロパティ
 
         #region コンストラクタ
-        public BigFraction() { }
+        public BigFraction() : this(0, 1) { }
         /// <summary>
         /// 分子と分母を指定して初期化
         /// </summary>
@@ -84,7 +84,7 @@ namespace Ksnm.Numerics
             {
                 exponent = -exponent;
                 Numerator = mantissa;
-                Denominator = 1 << exponent;
+                Denominator = (Integer)1 << exponent;
             }
             else
             {
@@ -164,9 +164,9 @@ namespace Ksnm.Numerics
         public static implicit operator Fraction(UInt64 value) => new Fraction(value);
         public static implicit operator Fraction(Int128 value) => new Fraction(value);
         public static implicit operator Fraction(UInt128 value) => new Fraction(value);
-        public static explicit operator Fraction(Float16 value) => new Fraction(value);
-        public static explicit operator Fraction(Float32 value) => new Fraction(value);
-        public static explicit operator Fraction(Float64 value) => new Fraction(value);
+        public static implicit operator Fraction(Float16 value) => new Fraction(value);
+        public static implicit operator Fraction(Float32 value) => new Fraction(value);
+        public static implicit operator Fraction(Float64 value) => new Fraction(value);
         public static implicit operator Fraction(Decimal value) => new Fraction(value);
         public static implicit operator Fraction(BigInteger value) => new Fraction(value);
         #endregion 他の型→BigDecimal
