@@ -77,111 +77,186 @@ namespace TestProject
         {
             // 1
             {
-                BigFraction bigFraction = 1;
+                Int32 origin = 1;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/1", bigFraction.ToString());
+                var other = (Int32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = (Float16)1 / (Float16)1;
+                Float16 origin = (Float16)1 / (Float16)1;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/1", bigFraction.ToString());
+                var other = (Float16)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0f;
+                Float32 origin = 1;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/1", bigFraction.ToString());
+                var other = (Float32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0;
+                Float64 origin = 1;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/1", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0m;
+                Decimal origin = 1;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/1", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 1/2
             {
-                BigFraction bigFraction = (Float16)1 / (Float16)2;
+                Float16 origin = (Float16)0.5f;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/2", bigFraction.ToString());
+                var other = (Float16)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 0.5f;
+                Float32 origin = 0.5f;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/2", bigFraction.ToString());
+                var other = (Float32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 0.5;
+                Float64 origin = 0.5;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/2", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 0.5m;
+                Decimal origin = 0.5m;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/2", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 1/4
             {
-                BigFraction bigFraction = (Float16)1 / (Float16)4;
+                Float16 origin = (Float16)1 / (Float16)4;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/4", bigFraction.ToString());
+                var other = (Float16)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0f / 4;
+                Float32 origin = 1.0f / 4;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/4", bigFraction.ToString());
+                var other = (Float32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0 / 4;
+                Float64 origin = 1.0 / 4;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/4", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0m / 4;
+                Decimal origin = 1.0m / 4;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/4", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 1/10
             {
-                BigFraction bigFraction = (Float16)1 / (Float16)10;
+                Float16 origin = (Float16)1 / (Float16)10;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("819/8192", bigFraction.ToString());
+                var other = (Float16)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0f / 10;
+                Float32 origin = 1.0f / 10;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("13421773/134217728", bigFraction.ToString());
+                var other = (Float32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0 / 10;
+                Float64 origin = 1.0 / 10;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("3602879701896397/36028797018963968", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 1.0m / 10;
+                Decimal origin = 1.0m / 10;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("1/10", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 256
             {
-                BigFraction bigFraction = 256;
+                Int32 origin = 256;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("256/1", bigFraction.ToString());
+                var other = (Int32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = (Float16)256;
+                Float16 origin = (Float16)256;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("256/1", bigFraction.ToString());
+                var other = (Float16)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 256.0f;
+                Float32 origin = 256;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("256/1", bigFraction.ToString());
+                var other = (Float32)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 256.0;
+                Float64 origin = 256;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("256/1", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             {
-                BigFraction bigFraction = 256m;
+                Decimal origin = 256m;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("256/1", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 4503599627370496
             {
-                BigFraction bigFraction = 4503599627370496.0;
+                Float64 origin = 4503599627370496.0;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("4503599627370496/1", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 9007199254740992
             {
-                BigFraction bigFraction = 9007199254740992.0;
+                Float64 origin = 9007199254740992.0;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("9007199254740992/1", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
             // 18014398509481984
             {
-                BigFraction bigFraction = 18014398509481984.0;
+                Float64 origin = 18014398509481984.0;
+                BigFraction bigFraction = origin;
                 Assert.AreEqual("18014398509481984/1", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
             }
         }
     }
