@@ -13,7 +13,12 @@ namespace Ksnm.Numerics
 {
     // コードを再利用するためのエイリアスを定義
     using Fraction = BigFraction;
-    using Number = BigInteger;
+    using Integer = BigInteger;
+    using Int8 = sbyte;
+    using UInt8 = byte;
+    using Float16 = Half;
+    using Float32 = float;
+    using Float64 = double;
     /// <summary>
     /// 任意精度の分数型
     /// </summary>
@@ -40,7 +45,7 @@ namespace Ksnm.Numerics
         /// </summary>
         /// <param name="numerator">分子</param>
         /// <param name="denominator">分母</param>
-        public BigFraction(Number numerator, Number denominator)
+        public BigFraction(Integer numerator, Integer denominator)
         {
             Numerator = numerator;
             Denominator = denominator;
@@ -50,8 +55,60 @@ namespace Ksnm.Numerics
         /// 分子を指定して初期化
         /// </summary>
         /// <param name="numerator">分子</param>
-        public BigFraction(Number numerator) : this(numerator, 1)
+        public BigFraction(Integer numerator) : this(numerator, 1)
         {
+        }
+        public BigFraction(Int32 numerator) : this(numerator, 1)
+        {
+        }
+        public BigFraction(UInt32 numerator) : this(numerator, 1)
+        {
+        }
+        public BigFraction(Int64 numerator) : this(numerator, 1)
+        {
+        }
+        public BigFraction(UInt64 numerator) : this(numerator, 1)
+        {
+        }
+        public BigFraction(Float16 number) : this((Float64)number)
+        {
+        }
+        public BigFraction(Float32 number) : this((Float64)number)
+        {
+        }
+        public BigFraction(Float64 number)
+        {
+            var exponent = number.GetExponent();
+            var mantissa = (Integer)number.GetMantissa();
+            if (exponent < 0)
+            {
+                exponent = -exponent;
+                Numerator = mantissa;
+                Denominator = 1 << exponent;
+            }
+            else
+            {
+                Numerator = mantissa << exponent;
+                Denominator = 1;
+            }
+            Reduce();
+        }
+        public BigFraction(Decimal number)
+        {
+            var exponent = number.GetExponent();
+            var mantissa = (Integer)number.GetMantissa();
+            if (exponent < 0)
+            {
+                exponent = -exponent;
+                Numerator = mantissa;
+                Denominator = BigInteger.Pow(10, exponent);
+            }
+            else
+            {
+                Numerator = mantissa << exponent;
+                Denominator = 1;
+            }
+            Reduce();
         }
         #endregion コンストラクタ
 
@@ -65,8 +122,8 @@ namespace Ksnm.Numerics
             var gcd = Math.GreatestCommonDivisor(Numerator, Denominator);
             if (gcd > 1)
             {
-                Numerator = (Number)(Numerator / gcd);
-                Denominator = (Number)(Denominator / gcd);
+                Numerator = (Integer)(Numerator / gcd);
+                Denominator = (Integer)(Denominator / gcd);
             }
         }
         /// <summary>
@@ -95,6 +152,25 @@ namespace Ksnm.Numerics
         #endregion object
 
         #region 型変換
+
+        #region 他の型→BigDecimal
+        public static implicit operator Fraction(UInt8 value)=>new Fraction((int)value);
+        public static implicit operator Fraction(Int8 value)=> new Fraction((int)value);
+        public static implicit operator Fraction(Int16 value) => new Fraction(value);
+        public static implicit operator Fraction(UInt16 value) => new Fraction(value);
+        public static implicit operator Fraction(Int32 value) => new Fraction(value);
+        public static implicit operator Fraction(UInt32 value) => new Fraction(value);
+        public static implicit operator Fraction(Int64 value) => new Fraction(value);
+        public static implicit operator Fraction(UInt64 value) => new Fraction(value);
+        public static implicit operator Fraction(Int128 value) => new Fraction(value);
+        public static implicit operator Fraction(UInt128 value) => new Fraction(value);
+        public static explicit operator Fraction(Float16 value) => new Fraction(value);
+        public static explicit operator Fraction(Float32 value) => new Fraction(value);
+        public static explicit operator Fraction(Float64 value) => new Fraction(value);
+        public static implicit operator Fraction(Decimal value) => new Fraction(value);
+        public static implicit operator Fraction(BigInteger value) => new Fraction(value);
+        #endregion 他の型→BigDecimal
+
         #endregion 型変換
 
         public static BigFraction One => throw new NotImplementedException();
@@ -647,7 +723,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             throw new NotImplementedException();
         }
