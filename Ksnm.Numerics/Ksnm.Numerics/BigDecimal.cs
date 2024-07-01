@@ -40,7 +40,7 @@ namespace Ksnm.Numerics
         /// <summary>
         /// MinExponentの初期値
         /// </summary>
-        public const int DefaultMinExponent = DecimalMinExponent;
+        public const int DefaultMinExponent = -28;
         /// <summary>
         /// System.Decimal の指数の最小値
         /// ※System.Decimal 内では正数で保持しているが、この値は指数のため負の値とする。
@@ -73,7 +73,7 @@ namespace Ksnm.Numerics
         /// <para>無限小数の場合にこの桁数で丸める</para>
         /// <para>精度とも言える</para>
         /// </summary>
-        public int MinExponent { get; private set; }
+        public int MinExponent { get; set; }
         #endregion プロパティ
 
         #region コンストラクタ
@@ -305,9 +305,20 @@ namespace Ksnm.Numerics
         {
             return Parse(value, NumberFormatInfo.CurrentInfo);
         }
-        public static BigDecimal Parse(string value, NumberFormatInfo numberFormatInfo)
+        public static BigDecimal Parse(string value, int minExponent)
+        {
+            return Parse(value, NumberFormatInfo.CurrentInfo, minExponent);
+        }
+        /// <summary>
+        /// 数値の文字列形式を、それと等価の BigDecimal に変換します。
+        /// </summary>
+        /// <param name="value">文字列</param>
+        /// <param name="numberFormatInfo">小数点の文字情報</param>
+        /// <param name="minExponent">精度を指定する。文字列のほうが精度が高い場合、高いほうの制度になる。</param>
+        public static BigDecimal Parse(string value, NumberFormatInfo numberFormatInfo, int minExponent = DefaultMinExponent)
         {
             var temp = Zero;
+            temp.MinExponent = minExponent;
             string numberDecimalSeparator = numberFormatInfo.NumberDecimalSeparator;
             var pointIindex = value.IndexOf(numberDecimalSeparator);
             if (pointIindex < 0)
