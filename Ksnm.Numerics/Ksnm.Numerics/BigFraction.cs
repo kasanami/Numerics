@@ -155,7 +155,7 @@ namespace Ksnm.Numerics
 
         #region 他の型→Fraction
         public static implicit operator Fraction(Int8 value) => new Fraction((int)value);
-        public static implicit operator Fraction(UInt8 value)=> new Fraction((int)value);
+        public static implicit operator Fraction(UInt8 value) => new Fraction((int)value);
         public static implicit operator Fraction(Int16 value) => new Fraction(value);
         public static implicit operator Fraction(UInt16 value) => new Fraction(value);
         public static implicit operator Fraction(Int32 value) => new Fraction(value);
@@ -172,42 +172,42 @@ namespace Ksnm.Numerics
         #endregion 他の型→Fraction
 
         #region Fraction→他の型
-        public static explicit operator Int8    (Fraction value)
+        public static explicit operator Int8(Fraction value)
         {
             var integer = (BigInteger)value;
             return (Int8)integer;
         }
-        public static explicit operator UInt8   (Fraction value)
+        public static explicit operator UInt8(Fraction value)
         {
             var integer = (BigInteger)value;
             return (UInt8)integer;
         }
-        public static explicit operator Int16   (Fraction value)
+        public static explicit operator Int16(Fraction value)
         {
             var integer = (BigInteger)value;
             return (Int16)integer;
         }
-        public static explicit operator UInt16  (Fraction value)
+        public static explicit operator UInt16(Fraction value)
         {
             var integer = (BigInteger)value;
             return (UInt16)integer;
         }
-        public static explicit operator Int32   (Fraction value)
+        public static explicit operator Int32(Fraction value)
         {
             var integer = (BigInteger)value;
             return (Int32)integer;
         }
-        public static explicit operator UInt32  (Fraction value)
+        public static explicit operator UInt32(Fraction value)
         {
             var integer = (BigInteger)value;
             return (UInt32)integer;
         }
-        public static explicit operator Int64   (Fraction value)
+        public static explicit operator Int64(Fraction value)
         {
             var integer = (BigInteger)value;
             return (Int64)integer;
         }
-        public static explicit operator UInt64  (Fraction value)
+        public static explicit operator UInt64(Fraction value)
         {
             var integer = (BigInteger)value;
             return (UInt64)integer;
@@ -217,12 +217,12 @@ namespace Ksnm.Numerics
             var integer = (BigInteger)value;
             return (Int128)integer;
         }
-        public static explicit operator UInt128 (Fraction value)
+        public static explicit operator UInt128(Fraction value)
         {
             var integer = (BigInteger)value;
             return (UInt128)integer;
         }
-        public static explicit operator Float16 (Fraction value)
+        public static explicit operator Float16(Fraction value)
         {
             var f = (Float64)value;
             return (Float16)f;
@@ -232,17 +232,17 @@ namespace Ksnm.Numerics
             var f = (Float64)value;
             return (Float32)f;
         }
-        public static explicit operator Float64 (Fraction value)
+        public static explicit operator Float64(Fraction value)
         {
             Float64 numerator = (Float64)value.Numerator;
             Float64 denominator = (Float64)value.Denominator;
             return numerator / denominator;
         }
-        public static explicit operator Decimal (Fraction value)
+        public static explicit operator Decimal(Fraction value)
         {
             Decimal numerator = (Decimal)value.Numerator;
             Decimal denominator = (Decimal)value.Denominator;
-            return numerator/ denominator;
+            return numerator / denominator;
         }
         public static explicit operator BigInteger(Fraction value)
         {
