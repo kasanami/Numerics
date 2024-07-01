@@ -198,6 +198,21 @@ namespace TestProject
                 var other = (Decimal)bigFraction;
                 Assert.AreEqual(origin, other);
             }
+            // 1 / 1_000_000_000_000
+            {
+                Float64 origin = 1.0 / 1_000_000_000_000;
+                BigFraction bigFraction = origin;
+                Assert.AreEqual("4951760157141521/4951760157141521099596496896", bigFraction.ToString());
+                var other = (Float64)bigFraction;
+                Assert.AreEqual(origin, other);
+            }
+            {
+                Decimal origin = 1.0m / 1_000_000_000_000;
+                BigFraction bigFraction = origin;
+                Assert.AreEqual("1/1000000000000", bigFraction.ToString());
+                var other = (Decimal)bigFraction;
+                Assert.AreEqual(origin, other);
+            }
             // 256
             {
                 Int32 origin = 256;
