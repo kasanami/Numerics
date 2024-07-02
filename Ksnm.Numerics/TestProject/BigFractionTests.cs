@@ -394,5 +394,16 @@ namespace TestProject
             fraction = new Fraction(-1, -1);
             Assert.IsTrue(Fraction.IsPositive(fraction));
         }
+
+        [TestMethod()]
+        public void GetHashCodeTest()
+        {
+            for (int i = -10; i < 10; i++)
+            {
+                var a = new Fraction(i, i);
+                var b = new Fraction(i, i);
+                Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+            }
+        }
     }
 }
