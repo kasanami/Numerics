@@ -801,87 +801,151 @@ namespace Ksnm.Numerics
 
         public string ToString(string? format, IFormatProvider? formatProvider)
         {
-            throw new NotImplementedException();
+            return ToString();
         }
 
         public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var str = ToString(format.ToString(), provider);
+                charsWritten = int.Min(str.Length, destination.Length);
+                str = str.Substring(0, charsWritten);
+                str.CopyTo(destination);
+                return true;
+            }
+            catch
+            {
+                charsWritten = 0;
+                return false;
+            }
         }
 
         public static BigFraction operator +(BigFraction value)
         {
-            throw new NotImplementedException();
+            return value;
+        }
+
+        public static Fraction operator ~(in Fraction value)
+        {
+            return new Fraction(~value.Numerator, ~value.Denominator);
         }
 
         public static BigFraction operator +(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            var temp = new Fraction();
+            if (right.Denominator == left.Denominator)
+            {
+                temp.Numerator = left.Numerator + right.Numerator;
+                temp.Denominator = left.Denominator;
+            }
+            else
+            {
+                temp.Numerator = left.Numerator * right.Denominator + right.Numerator * left.Denominator;
+                temp.Denominator = left.Denominator * right.Denominator;
+            }
+            temp.Reduce();
+            return temp;
         }
 
         public static BigFraction operator -(BigFraction value)
         {
-            throw new NotImplementedException();
+            return new BigFraction(-value.Numerator, value.Denominator);
         }
 
         public static BigFraction operator -(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            var temp = new Fraction();
+            if (right.Denominator == left.Denominator)
+            {
+                temp.Numerator = left.Numerator - right.Numerator;
+                temp.Denominator = left.Denominator;
+            }
+            else
+            {
+                temp.Numerator = left.Numerator * right.Denominator - right.Numerator * left.Denominator;
+                temp.Denominator = left.Denominator * right.Denominator;
+            }
+            temp.Reduce();
+            return temp;
         }
 
         public static BigFraction operator ++(BigFraction value)
         {
-            throw new NotImplementedException();
+            return new BigFraction(value.Numerator + 1, value.Denominator);
         }
 
         public static BigFraction operator --(BigFraction value)
         {
-            throw new NotImplementedException();
+            return new BigFraction(value.Numerator - 1, value.Denominator);
         }
 
         public static BigFraction operator *(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            var temp = new Fraction();
+            temp.Numerator = left.Numerator * right.Numerator;
+            temp.Denominator = left.Denominator * right.Denominator;
+            temp.Reduce();
+            return temp;
         }
 
         public static BigFraction operator /(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            var temp = new Fraction();
+            temp.Numerator = left.Numerator * right.Denominator;
+            temp.Denominator = left.Denominator * right.Numerator;
+            temp.Reduce();
+            return temp;
         }
 
         public static BigFraction operator %(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public static bool operator ==(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return Equals(left, right);
         }
 
         public static bool operator !=(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            // どちらかがNaNならfalse
+            if (IsNaN(left) || IsNaN(right))
+            {
+                return true;
+            }
+            return !left.Equals(right);
         }
 
         public static bool operator <(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return left.Numerator * right.Denominator < right.Numerator * left.Denominator;
         }
 
         public static bool operator >(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return left.Numerator * right.Denominator > right.Numerator * left.Denominator;
         }
 
         public static bool operator <=(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return left.Numerator * right.Denominator <= right.Numerator * left.Denominator;
         }
 
         public static bool operator >=(BigFraction left, BigFraction right)
         {
-            throw new NotImplementedException();
+            return left.Numerator * right.Denominator >= right.Numerator * left.Denominator;
+        }
+
+        public static bool Equals(in BigFraction objA, in BigFraction objB)
+        {
+            // どちらかがNaNならfalse
+            if (IsNaN(objA) || IsNaN(objB))
+            {
+                return false;
+            }
+            return objA.Equals(objB);
         }
 
         public override bool Equals(object? obj)

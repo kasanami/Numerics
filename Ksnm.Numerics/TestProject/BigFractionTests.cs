@@ -468,6 +468,77 @@ namespace TestProject
         }
 
         [TestMethod()]
+        public void OperationsTest1()
+        {
+            var value = new Fraction(1, 2);
+            var expected1 = new Fraction(1, 2);
+            var expected2 = new Fraction(-1, 2);
+            var expected3 = new Fraction(~1, ~2);
+            Assert.AreEqual(expected1, +value);
+            Assert.AreEqual(expected2, -value);
+            Assert.AreEqual(expected3, ~value);
+        }
+
+        [TestMethod()]
+        public void OperationsTest2()
+        {
+            var f1_1 = new Fraction(1, 1);
+            var f2_1 = new Fraction(2, 1);
+            var f3_1 = new Fraction(3, 1);
+            var f5_1 = new Fraction(5, 1);
+            var f7_1 = new Fraction(7, 1);
+            var f1_2 = new Fraction(1, 2);
+            var f2_2 = new Fraction(2, 2);
+            var f3_2 = new Fraction(3, 2);
+            var f1_4 = new Fraction(1, 4);
+            var f2_4 = new Fraction(2, 4);
+            var f3_4 = new Fraction(3, 4);
+
+            // +
+            Assert.AreEqual(f2_2, f1_2 + f1_2, $"{f1_2} + {f1_2}");
+            Assert.AreEqual(f3_2, f1_2 + f2_2, $"{f1_2} + {f2_2}");
+            Assert.AreEqual(f3_4, f1_2 + f1_4, $"{f1_2} + {f1_4}");
+            // -
+            Assert.AreEqual(f1_2, f2_2 - f1_2, $"{f2_2} - {f1_2}");
+            Assert.AreEqual(-f1_2, f1_2 - f2_2, $"{f1_2} - {f2_2}");
+            Assert.AreEqual(f2_4, f3_4 - f1_4, $"{f3_4} - {f1_4}");
+            // *
+            Assert.AreEqual(f1_4, f1_2 * f1_2, $"{f1_2} * {f1_2}");
+            Assert.AreEqual(f2_4, f1_2 * f2_2, $"{f1_2} * {f2_2}");
+            // /
+            Assert.AreEqual(f2_2, f1_2 / f1_2, $"{f1_2} / {f1_2}");
+            Assert.AreEqual(f2_4, f1_2 / f2_2, $"{f1_2} / {f2_2}");
+            // %
+            Assert.AreEqual(0, f5_1 % f2_1, $"{f5_1} % {f2_1}");
+            Assert.AreEqual(0, f7_1 % f2_1, $"{f7_1} % {f2_1}");
+
+            // ==
+            Assert.IsTrue(f1_2 == f2_4, $"{f1_2} == {f2_4}");
+            Assert.IsTrue(f2_4 == f1_2, $"{f2_4} == {f1_2}");
+            Assert.IsFalse(f2_4 == f2_2, $"{f2_4} == {f2_2}");
+            Assert.IsFalse(f3_4 == f1_2, $"{f3_4} == {f1_2}");
+            // !=
+            Assert.IsFalse(f1_2 != f2_4, $"{f1_2} != {f2_4}");
+            Assert.IsFalse(f2_4 != f1_2, $"{f2_4} != {f1_2}");
+            Assert.IsTrue(f2_4 != f2_2, $"{f2_4} != {f2_2}");
+            Assert.IsTrue(f3_4 != f1_2, $"{f3_4} != {f1_2}");
+            // >
+            Assert.IsTrue(f2_2 > f2_4, $"{f2_2} > {f2_4}");
+            Assert.IsTrue(f3_4 > f2_4, $"{f3_4} > {f2_4}");
+            // <
+            Assert.IsTrue(f2_4 < f2_2, $"{f2_4} < {f2_2}");
+            Assert.IsTrue(f2_4 < f3_4, $"{f2_4} < {f3_4}");
+            // >=
+            Assert.IsTrue(f1_2 >= f2_4, $"{f1_2} >= {f2_4}");
+            Assert.IsTrue(f2_2 >= f2_4, $"{f2_2} >= {f2_4}");
+            Assert.IsTrue(f3_4 >= f2_4, $"{f3_4} >= {f2_4}");
+            // <=
+            Assert.IsTrue(f2_4 <= f1_2, $"{f2_4} <= {f1_2}");
+            Assert.IsTrue(f2_4 <= f2_2, $"{f2_4} <= {f2_2}");
+            Assert.IsTrue(f2_4 <= f3_4, $"{f2_4} <= {f3_4}");
+        }
+
+        [TestMethod()]
         public void GetHashCodeTest()
         {
             for (int i = -10; i < 10; i++)

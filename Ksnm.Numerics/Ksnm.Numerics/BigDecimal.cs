@@ -1197,8 +1197,9 @@ namespace Ksnm.Numerics
             try
             {
                 var str = ToString(format.ToString(), provider);
-                str.CopyTo(destination);
                 charsWritten = int.Min(str.Length, destination.Length);
+                str = str.Substring(0, charsWritten);
+                str.CopyTo(destination);
                 return true;
             }
             catch
