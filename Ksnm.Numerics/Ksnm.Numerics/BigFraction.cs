@@ -262,16 +262,6 @@ namespace Ksnm.Numerics
 
         public static BigFraction MultiplicativeIdentity => 1;
 
-        static BigFraction INumberBase<BigFraction>.One => 1;
-
-        static int INumberBase<BigFraction>.Radix => 2;
-
-        static BigFraction INumberBase<BigFraction>.Zero => 0;
-
-        static BigFraction IAdditiveIdentity<BigFraction, BigFraction>.AdditiveIdentity => 0;
-
-        static BigFraction IMultiplicativeIdentity<BigFraction, BigFraction>.MultiplicativeIdentity => 1;
-
         public static BigFraction Abs(BigFraction value)
         {
             return new Fraction(Integer.Abs(value.Numerator), Integer.Abs(value.Denominator));
@@ -507,26 +497,6 @@ namespace Ksnm.Numerics
         }
 
         static bool INumberBase<BigFraction>.TryConvertToTruncating<TOther>(BigFraction value, out TOther result)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool INumberBase<BigFraction>.TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, out BigFraction result)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool INumberBase<BigFraction>.TryParse(string? s, NumberStyles style, IFormatProvider? provider, out BigFraction result)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool ISpanParsable<BigFraction>.TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out BigFraction result)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool IParsable<BigFraction>.TryParse(string? s, IFormatProvider? provider, out BigFraction result)
         {
             throw new NotImplementedException();
         }
