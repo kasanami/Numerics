@@ -17,6 +17,11 @@ namespace TestProject
         [TestMethod()]
         public void ConstantTest()
         {
+            Assert.AreEqual<Fraction>(1, Fraction.One);
+            Assert.AreEqual<Fraction>(0, Fraction.Zero);
+            Assert.AreEqual<Fraction>(2, Fraction.Radix);
+            Assert.AreEqual<Fraction>(Fraction.One, Fraction.MultiplicativeIdentity);
+            Assert.AreEqual<Fraction>(Fraction.Zero, Fraction.AdditiveIdentity);
 
         }
         [TestMethod()]
@@ -274,11 +279,62 @@ namespace TestProject
                 Assert.AreEqual(origin, other);
             }
         }
+
+        [TestMethod()]
+        public void AbsTest()
+        {
+        }
+
+        [TestMethod()]
+        public void CompareToTest()
+        {
+            {
+                Fraction a = new Fraction(1, 2);
+                Fraction b = new Fraction(2, 4);
+                Assert.AreEqual(0, a.CompareTo(b));
+                Assert.AreEqual(0, b.CompareTo(a));
+            }
+            {
+                Fraction a = new Fraction(1, -2);
+                Fraction b = new Fraction(2, -4);
+                Assert.AreEqual(0, a.CompareTo(b));
+                Assert.AreEqual(0, b.CompareTo(a));
+            }
+            {
+                Fraction a = new Fraction(1, 2);
+                Fraction b = new Fraction(1, 3);
+                Assert.AreEqual(+1, a.CompareTo(b));
+                Assert.AreEqual(-1, b.CompareTo(a));
+            }
+            {
+                Fraction a = new Fraction(1, -2);
+                Fraction b = new Fraction(1, -3);
+                Assert.AreEqual(-1, a.CompareTo(b));
+                Assert.AreEqual(+1, b.CompareTo(a));
+            }
+        }
+
+        [TestMethod()]
+        public void IsEvenIntegerTest()
+        {
+        }
+        [TestMethod()]
+        public void IsFiniteTest()
+        {
+        }
+        [TestMethod()]
+        public void IsIntegerTest()
+        {
+        }
+        [TestMethod()]
+        public void IsNaNTest()
+        {
+        }
         [TestMethod()]
         public void IsNegativeTest()
         {
             // 分母が0ならfalse
-            Fraction fraction = new Fraction(0,0);
+            Fraction fraction = new Fraction(0, 0);
             Assert.IsFalse(Fraction.IsNegative(fraction));
             fraction = new Fraction(-0, 0);
             Assert.IsFalse(Fraction.IsNegative(fraction));
@@ -299,10 +355,44 @@ namespace TestProject
             // 分母が負
             fraction = new Fraction(1, -1);
             Assert.IsTrue(Fraction.IsNegative(fraction));
-            fraction = new Fraction(0, -1);
-            Assert.IsTrue(Fraction.IsNegative(fraction));
+            fraction = new Fraction(0, -1);// ゼロは正
+            Assert.IsFalse(Fraction.IsNegative(fraction));
             fraction = new Fraction(-1, -1);
             Assert.IsFalse(Fraction.IsNegative(fraction));
+        }
+        [TestMethod()]
+        public void IsOddIntegerTest()
+        {
+        }
+        [TestMethod()]
+        public void IsPositiveTest()
+        {
+            // 分母が0ならfalse
+            Fraction fraction = new Fraction(0, 0);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+            fraction = new Fraction(-0, 0);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+            fraction = new Fraction(-1, 0);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+            fraction = new Fraction(1, 0);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+
+            // 分母が正
+            fraction = new Fraction(-1, 1);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+            fraction = new Fraction(0, 1);// ゼロは正
+            Assert.IsTrue(Fraction.IsPositive(fraction));
+            fraction = new Fraction(-0, 1);// マイナスをつけても関係なし
+            Assert.IsTrue(Fraction.IsPositive(fraction));
+            fraction = new Fraction(1, 1);
+            Assert.IsTrue(Fraction.IsPositive(fraction));
+            // 分母が負
+            fraction = new Fraction(1, -1);
+            Assert.IsFalse(Fraction.IsPositive(fraction));
+            fraction = new Fraction(0, -1);// ゼロは正
+            Assert.IsTrue(Fraction.IsPositive(fraction));
+            fraction = new Fraction(-1, -1);
+            Assert.IsTrue(Fraction.IsPositive(fraction));
         }
     }
 }

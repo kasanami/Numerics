@@ -313,13 +313,19 @@ namespace Ksnm.Numerics
 
         public static bool IsNegative(BigFraction value)
         {
+            // 分母が0なら非数
             if (value.Denominator == 0)
             {
                 return false;
             }
+            // 分子が0なら正
+            if (value.Numerator == 0)
+            {
+                return false;
+            }
+            // 両方負なら正
             if (Integer.IsNegative(value.Numerator) && Integer.IsNegative(value.Denominator))
             {
-                // 両方負なら正
                 return false;
             }
             // どちらかが負なら負
@@ -342,11 +348,23 @@ namespace Ksnm.Numerics
 
         public static bool IsPositive(BigFraction value)
         {
+            // 分母が0なら非数
             if (value.Denominator == 0)
             {
                 return false;
             }
-            return Integer.IsPositive(value.Numerator);
+            // 分子が0なら正
+            if (value.Numerator == 0)
+            {
+                return true;
+            }
+            // 両方負なら正
+            if (Integer.IsNegative(value.Numerator) && Integer.IsNegative(value.Denominator))
+            {
+                return true;
+            }
+            // 両方正なら正
+            return Integer.IsPositive(value.Numerator) && Integer.IsPositive(value.Denominator);
         }
 
         public static bool IsPositiveInfinity(BigFraction value) => false;
@@ -387,17 +405,30 @@ namespace Ksnm.Numerics
 
         public static BigFraction MaxMagnitudeNumber(BigFraction x, BigFraction y)
         {
-            throw new NotImplementedException();
+            return MaxMagnitude(x, y);
         }
 
         public static BigFraction MinMagnitude(BigFraction x, BigFraction y)
         {
-            throw new NotImplementedException();
+            Fraction ax = Abs(x);
+            Fraction ay = Abs(y);
+
+            if (ax < ay)
+            {
+                return x;
+            }
+
+            if (ax == ay)
+            {
+                return IsNegative(x) ? x : y;
+            }
+
+            return y;
         }
 
         public static BigFraction MinMagnitudeNumber(BigFraction x, BigFraction y)
         {
-            throw new NotImplementedException();
+            return MinMagnitude(x, y);
         }
 
         public static BigFraction Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
@@ -440,10 +471,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static BigFraction INumberBase<BigFraction>.Abs(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        static BigFraction INumberBase<BigFraction>.Abs(BigFraction value) => Abs(value);
 
         static bool INumberBase<BigFraction>.IsCanonical(BigFraction value)
         {
@@ -622,12 +650,23 @@ namespace Ksnm.Numerics
 
         public int CompareTo(object? obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+            {
+                return 1;
+            }
+            if (!(obj is BigFraction))
+            {
+                throw new ArgumentException();
+            }
+            return CompareTo((BigFraction)obj);
         }
 
         public int CompareTo(BigFraction other)
         {
-            throw new NotImplementedException();
+            var numerator = this.Numerator;// インスタンスの値を変更しないようにthisのは複製
+            numerator *= other.Denominator;
+            other.Numerator *= this.Denominator;
+            return numerator.CompareTo(other.Numerator);
         }
 
         public bool Equals(BigFraction other)
@@ -647,17 +686,19 @@ namespace Ksnm.Numerics
 
         int IComparable.CompareTo(object? obj)
         {
-            throw new NotImplementedException();
+            return CompareTo(obj);
         }
 
         int IComparable<BigFraction>.CompareTo(BigFraction other)
         {
-            throw new NotImplementedException();
+            return CompareTo(other);
         }
 
         bool IEquatable<BigFraction>.Equals(BigFraction other)
         {
-            throw new NotImplementedException();
+            this.Numerator *= other.Denominator;
+            other.Numerator *= this.Denominator;
+            return Numerator.Equals(other.Numerator);
         }
 
         string IFormattable.ToString(string? format, IFormatProvider? formatProvider)
