@@ -274,5 +274,35 @@ namespace TestProject
                 Assert.AreEqual(origin, other);
             }
         }
+        [TestMethod()]
+        public void IsNegativeTest()
+        {
+            // 分母が0ならfalse
+            Fraction fraction = new Fraction(0,0);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            fraction = new Fraction(-0, 0);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            fraction = new Fraction(-1, 0);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            fraction = new Fraction(1, 0);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+
+            // 分母が正
+            fraction = new Fraction(-1, 1);
+            Assert.IsTrue(Fraction.IsNegative(fraction));
+            fraction = new Fraction(-0, 1);// マイナスをつけても関係なし
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            fraction = new Fraction(0, 1);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            fraction = new Fraction(1, 1);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+            // 分母が負
+            fraction = new Fraction(1, -1);
+            Assert.IsTrue(Fraction.IsNegative(fraction));
+            fraction = new Fraction(0, -1);
+            Assert.IsTrue(Fraction.IsNegative(fraction));
+            fraction = new Fraction(-1, -1);
+            Assert.IsFalse(Fraction.IsNegative(fraction));
+        }
     }
 }

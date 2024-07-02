@@ -252,119 +252,137 @@ namespace Ksnm.Numerics
 
         #endregion 型変換
 
-        public static BigFraction One => throw new NotImplementedException();
+        public static BigFraction One => 1;
 
-        public static int Radix => throw new NotImplementedException();
+        public static int Radix => 2;
 
-        public static BigFraction Zero => throw new NotImplementedException();
+        public static BigFraction Zero => 0;
 
-        public static BigFraction AdditiveIdentity => throw new NotImplementedException();
+        public static BigFraction AdditiveIdentity => 0;
 
-        public static BigFraction MultiplicativeIdentity => throw new NotImplementedException();
+        public static BigFraction MultiplicativeIdentity => 1;
 
-        static BigFraction INumberBase<BigFraction>.One => throw new NotImplementedException();
+        static BigFraction INumberBase<BigFraction>.One => 1;
 
-        static int INumberBase<BigFraction>.Radix => throw new NotImplementedException();
+        static int INumberBase<BigFraction>.Radix => 2;
 
-        static BigFraction INumberBase<BigFraction>.Zero => throw new NotImplementedException();
+        static BigFraction INumberBase<BigFraction>.Zero => 0;
 
-        static BigFraction IAdditiveIdentity<BigFraction, BigFraction>.AdditiveIdentity => throw new NotImplementedException();
+        static BigFraction IAdditiveIdentity<BigFraction, BigFraction>.AdditiveIdentity => 0;
 
-        static BigFraction IMultiplicativeIdentity<BigFraction, BigFraction>.MultiplicativeIdentity => throw new NotImplementedException();
+        static BigFraction IMultiplicativeIdentity<BigFraction, BigFraction>.MultiplicativeIdentity => 1;
 
         public static BigFraction Abs(BigFraction value)
         {
-            throw new NotImplementedException();
+            return new Fraction(Integer.Abs(value.Numerator), Integer.Abs(value.Denominator));
         }
 
-        public static bool IsCanonical(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsCanonical(BigFraction value) => true;
 
-        public static bool IsComplexNumber(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsComplexNumber(BigFraction value) => false;
 
         public static bool IsEvenInteger(BigFraction value)
         {
-            throw new NotImplementedException();
+            value.Reduce();
+            if (value.Denominator == 1)
+            {
+                return Integer.IsEvenInteger(value.Numerator);
+            }
+            return false;
         }
 
         public static bool IsFinite(BigFraction value)
         {
-            throw new NotImplementedException();
+            return value.Denominator != 0;
         }
 
-        public static bool IsImaginaryNumber(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsImaginaryNumber(BigFraction value) => false;
 
-        public static bool IsInfinity(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsInfinity(BigFraction value) => false;
 
         public static bool IsInteger(BigFraction value)
         {
-            throw new NotImplementedException();
+            value.Reduce();
+            return value.Denominator == 1;
         }
 
         public static bool IsNaN(BigFraction value)
         {
-            throw new NotImplementedException();
+            return value.Denominator == 0;
         }
 
         public static bool IsNegative(BigFraction value)
         {
-            throw new NotImplementedException();
+            if (value.Denominator == 0)
+            {
+                return false;
+            }
+            if (Integer.IsNegative(value.Numerator) && Integer.IsNegative(value.Denominator))
+            {
+                // 両方負なら正
+                return false;
+            }
+            // どちらかが負なら負
+            return Integer.IsNegative(value.Numerator) || Integer.IsNegative(value.Denominator);
         }
 
-        public static bool IsNegativeInfinity(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsNegativeInfinity(BigFraction value) => false;
 
-        public static bool IsNormal(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsNormal(BigFraction value) => value != 0;
 
         public static bool IsOddInteger(BigFraction value)
         {
-            throw new NotImplementedException();
+            value.Reduce();
+            if (value.Denominator == 1)
+            {
+                return Integer.IsOddInteger(value.Numerator);
+            }
+            return false;
         }
 
         public static bool IsPositive(BigFraction value)
         {
-            throw new NotImplementedException();
+            if (value.Denominator == 0)
+            {
+                return false;
+            }
+            return Integer.IsPositive(value.Numerator);
         }
 
-        public static bool IsPositiveInfinity(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsPositiveInfinity(BigFraction value) => false;
 
         public static bool IsRealNumber(BigFraction value)
         {
-            throw new NotImplementedException();
+            return value.Denominator != 0;
         }
 
-        public static bool IsSubnormal(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
+        public static bool IsSubnormal(BigFraction value) => false;
 
         public static bool IsZero(BigFraction value)
         {
-            throw new NotImplementedException();
+            if (value.Denominator == 0)
+            {
+                return false;
+            }
+            return value.Numerator.IsZero;
         }
 
         public static BigFraction MaxMagnitude(BigFraction x, BigFraction y)
         {
-            throw new NotImplementedException();
+            BigFraction ax = Abs(x);
+            BigFraction ay = Abs(y);
+
+            if (ax > ay)
+            {
+                return x;
+            }
+
+            if (ax == ay)
+            {
+                return IsNegative(x) ? y : x;
+            }
+
+            return y;
         }
 
         public static BigFraction MaxMagnitudeNumber(BigFraction x, BigFraction y)
