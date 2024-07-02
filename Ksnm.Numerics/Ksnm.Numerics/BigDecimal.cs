@@ -1789,7 +1789,7 @@ namespace Ksnm.Numerics
             }
         }
 
-        static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, out TOther result)
+        static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
         {
             if (typeof(TOther) == typeof(double))
             {

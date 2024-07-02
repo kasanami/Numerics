@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
@@ -421,84 +422,352 @@ namespace Ksnm.Numerics
             return MinMagnitude(x, y);
         }
 
+        public static BigFraction Parse(string s)
+        {
+            var temp = Zero;
+            string slash = "/";
+            var texts = s.Split(slash);
+            if (texts.Length == 1)
+            {
+                temp.Numerator = BigInteger.Parse(texts[0]);
+            }
+            else if (texts.Length >= 2)
+            {
+                temp.Numerator = BigInteger.Parse(texts[0]);
+                temp.Denominator = BigInteger.Parse(texts[1]);
+            }
+            return temp;
+        }
+
+        public static BigFraction Parse(string s, NumberFormatInfo numberFormatInfo)
+        {
+            return Parse(s);
+        }
+
         public static BigFraction Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            return Parse(s.ToString());
         }
 
         public static BigFraction Parse(string s, NumberStyles style, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            return Parse(s);
         }
 
         public static BigFraction Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            return Parse(s.ToString());
         }
 
         public static BigFraction Parse(string s, IFormatProvider? provider)
         {
-            throw new NotImplementedException();
+            return Parse(s);
         }
 
         public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
         {
-            throw new NotImplementedException();
+            try
+            {
+                result = Parse(s, style, provider);
+                return true;
+            }
+            catch
+            {
+                result = 0;
+                return false;
+            }
         }
 
         public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
         {
-            throw new NotImplementedException();
+            if (s == null)
+            {
+                result = Zero;
+                return false;
+            }
+            try
+            {
+                result = Parse(s, style, provider);
+                return true;
+            }
+            catch
+            {
+                result = 0;
+                return false;
+            }
         }
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
         {
-            throw new NotImplementedException();
+            return TryParse(s, NumberStyles.Number, provider, out result);
         }
 
         public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
         {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction ISpanParsable<BigFraction>.Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IParsable<BigFraction>.Parse(string s, IFormatProvider? provider)
-        {
-            throw new NotImplementedException();
+            return TryParse(s, NumberStyles.Number, provider, out result);
         }
 
         static bool INumberBase<BigFraction>.TryConvertFromChecked<TOther>(TOther value, out BigFraction result)
         {
-            throw new NotImplementedException();
+            return TryConvertFromChecked(value, out result);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool TryConvertFromChecked<TOther>(TOther value, out BigFraction result)
+            where TOther : INumberBase<TOther>
+        {
+            if (typeof(TOther) == typeof(byte))
+            {
+                byte actualValue = (byte)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(char))
+            {
+                char actualValue = (char)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(ushort))
+            {
+                ushort actualValue = (ushort)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(uint))
+            {
+                uint actualValue = (uint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(ulong))
+            {
+                ulong actualValue = (ulong)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(UInt128))
+            {
+                UInt128 actualValue = (UInt128)(object)value;
+                result = checked((decimal)actualValue);
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nuint))
+            {
+                nuint actualValue = (nuint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
         }
 
         static bool INumberBase<BigFraction>.TryConvertFromSaturating<TOther>(TOther value, out BigFraction result)
         {
-            throw new NotImplementedException();
+            return TryConvertFrom(value, out result);
         }
 
         static bool INumberBase<BigFraction>.TryConvertFromTruncating<TOther>(TOther value, out BigFraction result)
         {
-            throw new NotImplementedException();
+            return TryConvertFrom(value, out result);
         }
 
-        static bool INumberBase<BigFraction>.TryConvertToChecked<TOther>(BigFraction value, out TOther result)
+        private static bool TryConvertFrom<TOther>(TOther value, out BigFraction result)
+            where TOther : INumberBase<TOther>
         {
-            throw new NotImplementedException();
+            if (typeof(TOther) == typeof(byte))
+            {
+                byte actualValue = (byte)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(char))
+            {
+                char actualValue = (char)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(ushort))
+            {
+                ushort actualValue = (ushort)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(uint))
+            {
+                uint actualValue = (uint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(ulong))
+            {
+                ulong actualValue = (ulong)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(UInt128))
+            {
+                UInt128 actualValue = (UInt128)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nuint))
+            {
+                nuint actualValue = (nuint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
         }
 
-        static bool INumberBase<BigFraction>.TryConvertToSaturating<TOther>(BigFraction value, out TOther result)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool INumberBase<BigFraction>.TryConvertToChecked<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
         {
-            throw new NotImplementedException();
+            if (typeof(TOther) == typeof(double))
+            {
+                double actualResult = checked((double)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Half))
+            {
+                Half actualResult = checked((Half)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(short))
+            {
+                short actualResult = checked((short)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(int))
+            {
+                int actualResult = checked((int)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(long))
+            {
+                long actualResult = checked((long)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Int128))
+            {
+                Int128 actualResult = checked((Int128)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nint))
+            {
+                nint actualResult = checked((nint)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(sbyte))
+            {
+                sbyte actualResult = checked((sbyte)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(float))
+            {
+                float actualResult = checked((float)value);
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
         }
 
-        static bool INumberBase<BigFraction>.TryConvertToTruncating<TOther>(BigFraction value, out TOther result)
+        static bool INumberBase<BigFraction>.TryConvertToSaturating<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
         {
-            throw new NotImplementedException();
+            return TryConvertTo(value, out result);
+        }
+
+        static bool INumberBase<BigFraction>.TryConvertToTruncating<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+        {
+            return TryConvertTo(value, out result);
+        }
+
+        private static bool TryConvertTo<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+            where TOther : INumberBase<TOther>
+        {
+            if (typeof(TOther) == typeof(double))
+            {
+                double actualResult = (double)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Half))
+            {
+                Half actualResult = (Half)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(short))
+            {
+                short actualResult = (value >= short.MaxValue) ? short.MaxValue :
+                                     (value <= short.MinValue) ? short.MinValue : (short)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(int))
+            {
+                int actualResult = (value >= int.MaxValue) ? int.MaxValue :
+                                   (value <= int.MinValue) ? int.MinValue : (int)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(long))
+            {
+                long actualResult = (value >= long.MaxValue) ? long.MaxValue :
+                                    (value <= long.MinValue) ? long.MinValue : (long)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Int128))
+            {
+                Int128 actualResult = (Int128)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nint))
+            {
+                nint actualResult = (value >= nint.MaxValue) ? nint.MaxValue :
+                                    (value <= nint.MinValue) ? nint.MinValue : (nint)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(sbyte))
+            {
+                sbyte actualResult = (value >= sbyte.MaxValue) ? sbyte.MaxValue :
+                                     (value <= sbyte.MinValue) ? sbyte.MinValue : (sbyte)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(float))
+            {
+                float actualResult = (float)value;
+                result = (TOther)(object)actualResult;
+                return true;
+            }
+            else
+            {
+                result = default;
+                return false;
+            }
         }
 
         public int CompareTo(object? obj)
