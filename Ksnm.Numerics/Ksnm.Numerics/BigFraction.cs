@@ -111,6 +111,23 @@ namespace Ksnm.Numerics
             }
             Reduce();
         }
+        public BigFraction(BigDecimal number)
+        {
+            var exponent = number.Exponent;
+            var mantissa = number.Mantissa;
+            if (exponent < 0)
+            {
+                exponent = -exponent;
+                Numerator = mantissa;
+                Denominator = Integer.Pow(10, exponent);
+            }
+            else
+            {
+                Numerator = mantissa << exponent;
+                Denominator = 1;
+            }
+            Reduce();
+        }
         #endregion コンストラクタ
 
         #region 独自関数
@@ -170,6 +187,7 @@ namespace Ksnm.Numerics
         public static implicit operator Fraction(Float64 value) => new Fraction(value);
         public static implicit operator Fraction(Decimal value) => new Fraction(value);
         public static implicit operator Fraction(Integer value) => new Fraction(value);
+        public static implicit operator Fraction(BigDecimal value) => new Fraction(value);
         #endregion 他の型→Fraction
 
         #region Fraction→他の型
@@ -249,10 +267,44 @@ namespace Ksnm.Numerics
         {
             return value.Numerator / value.Denominator;
         }
+        public static explicit operator BigDecimal(Fraction value)
+        {
+            BigDecimal numerator = value.Numerator;
+            BigDecimal denominator = value.Denominator;
+            var exponent = -(int)Integer.Log10(value.Denominator) * 10;
+            if (numerator.MinExponent > exponent)
+            {
+                numerator.MinExponent = exponent;
+            }
+            return numerator / denominator;
+        }
         #endregion Fraction→他の型
 
         #endregion 型変換
 
+        #region 数学関数
+        /// <summary>
+        /// 指定された数値の平方根を返します。
+        /// </summary>
+        /// <param name="value">平方根を求める対象の数値。</param>
+        /// <param name="count">計算回数</param>
+        /// <returns>戻り値 0 または正 d の正の平方根。</returns>
+        public static Fraction Sqrt(Fraction value, int count)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            var temp = value;
+            for (int i = 0; i < count; i++)
+            {
+                temp = (temp * temp + value) / (2 * temp);
+            }
+            return temp;
+        }
+        #endregion 数学関数
+
+        #region 
         public static Fraction One => 1;
 
         public static int Radix => 2;
@@ -770,6 +822,10 @@ namespace Ksnm.Numerics
             }
         }
 
+        #endregion
+
+        #region CompareTo
+
         public int CompareTo(object? obj)
         {
             if (obj == null)
@@ -790,6 +846,8 @@ namespace Ksnm.Numerics
             other.Numerator *= this.Denominator;
             return numerator.CompareTo(other.Numerator);
         }
+
+        #endregion CompareTo
 
         public bool Equals(Fraction other)
         {
@@ -820,7 +878,7 @@ namespace Ksnm.Numerics
                 return false;
             }
         }
-
+        #region Operations
         public static Fraction operator +(Fraction value)
         {
             return value;
@@ -937,6 +995,7 @@ namespace Ksnm.Numerics
         {
             return left.Numerator * right.Denominator >= right.Numerator * left.Denominator;
         }
+        #endregion Operations
 
         public static bool Equals(in Fraction objA, in Fraction objB)
         {
