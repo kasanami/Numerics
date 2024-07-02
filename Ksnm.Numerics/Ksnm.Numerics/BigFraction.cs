@@ -274,7 +274,7 @@ namespace Ksnm.Numerics
         public static bool IsEvenInteger(BigFraction value)
         {
             value.Reduce();
-            if (value.Denominator == 1)
+            if (value.Denominator == 1 || value.Denominator == -1)
             {
                 return Integer.IsEvenInteger(value.Numerator);
             }
@@ -293,7 +293,7 @@ namespace Ksnm.Numerics
         public static bool IsInteger(BigFraction value)
         {
             value.Reduce();
-            return value.Denominator == 1;
+            return (value.Denominator == 1 || value.Denominator == -1);
         }
 
         public static bool IsNaN(BigFraction value)
@@ -329,7 +329,7 @@ namespace Ksnm.Numerics
         public static bool IsOddInteger(BigFraction value)
         {
             value.Reduce();
-            if (value.Denominator == 1)
+            if (value.Denominator == 1 || value.Denominator == -1)
             {
                 return Integer.IsOddInteger(value.Numerator);
             }
