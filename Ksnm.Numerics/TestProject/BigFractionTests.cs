@@ -482,6 +482,7 @@ namespace TestProject
         [TestMethod()]
         public void OperationsTest2()
         {
+            var f0_1 = new Fraction(0, 1);
             var f1_1 = new Fraction(1, 1);
             var f2_1 = new Fraction(2, 1);
             var f3_1 = new Fraction(3, 1);
@@ -508,6 +509,7 @@ namespace TestProject
             // /
             Assert.AreEqual(f2_2, f1_2 / f1_2, $"{f1_2} / {f1_2}");
             Assert.AreEqual(f2_4, f1_2 / f2_2, $"{f1_2} / {f2_2}");
+            Assert.IsTrue(Fraction.IsNaN(f1_2 / f0_1));
             // %
             Assert.AreEqual(0, f5_1 % f2_1, $"{f5_1} % {f2_1}");
             Assert.AreEqual(0, f7_1 % f2_1, $"{f7_1} % {f2_1}");
