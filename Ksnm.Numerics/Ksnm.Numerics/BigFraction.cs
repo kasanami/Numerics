@@ -554,7 +554,10 @@ namespace Ksnm.Numerics
 
         public bool Equals(BigFraction other)
         {
-            throw new NotImplementedException();
+            var numerator = Numerator;// インスタンスの値を変更しないようにthisのは複製
+            numerator *= other.Denominator;
+            other.Numerator *= Denominator;
+            return numerator.Equals(other.Numerator);
         }
 
         public string ToString(string? format, IFormatProvider? formatProvider)
@@ -567,29 +570,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        bool IEquatable<BigFraction>.Equals(BigFraction other)
-        {
-            this.Numerator *= other.Denominator;
-            other.Numerator *= this.Denominator;
-            return Numerator.Equals(other.Numerator);
-        }
-
-        string IFormattable.ToString(string? format, IFormatProvider? formatProvider)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigFraction operator +(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IUnaryPlusOperators<BigFraction, BigFraction>.operator +(BigFraction value)
         {
             throw new NotImplementedException();
         }
@@ -599,17 +580,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static BigFraction IAdditionOperators<BigFraction, BigFraction, BigFraction>.operator +(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigFraction operator -(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IUnaryNegationOperators<BigFraction, BigFraction>.operator -(BigFraction value)
         {
             throw new NotImplementedException();
         }
@@ -619,17 +590,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static BigFraction ISubtractionOperators<BigFraction, BigFraction, BigFraction>.operator -(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigFraction operator ++(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IIncrementOperators<BigFraction>.operator ++(BigFraction value)
         {
             throw new NotImplementedException();
         }
@@ -639,17 +600,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static BigFraction IDecrementOperators<BigFraction>.operator --(BigFraction value)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigFraction operator *(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IMultiplyOperators<BigFraction, BigFraction, BigFraction>.operator *(BigFraction left, BigFraction right)
         {
             throw new NotImplementedException();
         }
@@ -659,17 +610,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static BigFraction IDivisionOperators<BigFraction, BigFraction, BigFraction>.operator /(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BigFraction operator %(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
-        static BigFraction IModulusOperators<BigFraction, BigFraction, BigFraction>.operator %(BigFraction left, BigFraction right)
         {
             throw new NotImplementedException();
         }
@@ -679,17 +620,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static bool IEqualityOperators<BigFraction, BigFraction, bool>.operator ==(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static bool operator !=(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool IEqualityOperators<BigFraction, BigFraction, bool>.operator !=(BigFraction left, BigFraction right)
         {
             throw new NotImplementedException();
         }
@@ -699,17 +630,7 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static bool IComparisonOperators<BigFraction, BigFraction, bool>.operator <(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static bool operator >(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool IComparisonOperators<BigFraction, BigFraction, bool>.operator >(BigFraction left, BigFraction right)
         {
             throw new NotImplementedException();
         }
@@ -719,29 +640,27 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
 
-        static bool IComparisonOperators<BigFraction, BigFraction, bool>.operator <=(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static bool operator >=(BigFraction left, BigFraction right)
-        {
-            throw new NotImplementedException();
-        }
-
-        static bool IComparisonOperators<BigFraction, BigFraction, bool>.operator >=(BigFraction left, BigFraction right)
         {
             throw new NotImplementedException();
         }
 
         public override bool Equals(object? obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is BigFraction))
+            {
+                throw new ArgumentException();
+            }
+            return Equals((BigFraction)obj);
         }
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return Numerator.GetHashCode() ^ Denominator.GetHashCode();
         }
     }
 }
