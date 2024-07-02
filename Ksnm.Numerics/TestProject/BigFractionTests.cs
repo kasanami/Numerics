@@ -283,6 +283,12 @@ namespace TestProject
         [TestMethod()]
         public void AbsTest()
         {
+            Assert.AreEqual(new Fraction(0, 1), Fraction.Abs(new Fraction(0, 1)));
+            Assert.AreEqual(new Fraction(0, 1), Fraction.Abs(new Fraction(0, -1)));
+            Assert.AreEqual(new Fraction(1, 1), Fraction.Abs(new Fraction(1, 1)));
+            Assert.AreEqual(new Fraction(1, 1), Fraction.Abs(new Fraction(-1, 1)));
+            Assert.AreEqual(new Fraction(1, 1), Fraction.Abs(new Fraction(1, -1)));
+            Assert.AreEqual(new Fraction(1, 1), Fraction.Abs(new Fraction(-1, -1)));
         }
 
         [TestMethod()]
@@ -357,14 +363,34 @@ namespace TestProject
         [TestMethod()]
         public void IsFiniteTest()
         {
+            Assert.IsFalse(Fraction.IsFinite(new Fraction(0, 0)));
+            Assert.IsFalse(Fraction.IsFinite(new Fraction(1, 0)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(1, 1)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(1, -1)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(-1, 1)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(2, 1)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(-2, 1)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(1, 2)));
+            Assert.IsTrue(Fraction.IsFinite(new Fraction(1, -2)));
         }
         [TestMethod()]
         public void IsIntegerTest()
         {
+            Assert.IsFalse(Fraction.IsInteger(new Fraction(0, 0)));
+            Assert.IsFalse(Fraction.IsInteger(new Fraction(1, 0)));
+            Assert.IsTrue(Fraction.IsInteger(new Fraction(1, 1)));
+            Assert.IsTrue(Fraction.IsInteger(new Fraction(1, -1)));
+            Assert.IsTrue(Fraction.IsInteger(new Fraction(-1, 1)));
+            Assert.IsTrue(Fraction.IsInteger(new Fraction(2, 1)));
+            Assert.IsTrue(Fraction.IsInteger(new Fraction(-2, 1)));
+            Assert.IsFalse(Fraction.IsInteger(new Fraction(1, 2)));
+            Assert.IsFalse(Fraction.IsInteger(new Fraction(1, -2)));
         }
         [TestMethod()]
         public void IsNaNTest()
         {
+            Assert.IsTrue(Fraction.IsNaN(new Fraction(1, 0)));
+            Assert.IsFalse(Fraction.IsNaN(new Fraction(0, 1)));
         }
         [TestMethod()]
         public void IsNegativeTest()
