@@ -23,7 +23,7 @@ namespace Ksnm.Numerics
     /// <summary>
     /// 任意精度の分数型
     /// </summary>
-    public struct BigFraction : INumber<BigFraction>
+    public struct BigFraction : INumber<Fraction>
     {
         #region フィールド
         #endregion フィールド
@@ -32,11 +32,11 @@ namespace Ksnm.Numerics
         /// <summary>
         /// 分子
         /// </summary>
-        public BigInteger Numerator { get; private set; }
+        public Integer Numerator { get; private set; }
         /// <summary>
         /// 分母
         /// </summary>
-        public BigInteger Denominator { get; private set; }
+        public Integer Denominator { get; private set; }
         #endregion プロパティ
 
         #region コンストラクタ
@@ -102,7 +102,7 @@ namespace Ksnm.Numerics
             {
                 exponent = -exponent;
                 Numerator = mantissa;
-                Denominator = BigInteger.Pow(10, exponent);
+                Denominator = Integer.Pow(10, exponent);
             }
             else
             {
@@ -169,58 +169,58 @@ namespace Ksnm.Numerics
         public static implicit operator Fraction(Float32 value) => new Fraction(value);
         public static implicit operator Fraction(Float64 value) => new Fraction(value);
         public static implicit operator Fraction(Decimal value) => new Fraction(value);
-        public static implicit operator Fraction(BigInteger value) => new Fraction(value);
+        public static implicit operator Fraction(Integer value) => new Fraction(value);
         #endregion 他の型→Fraction
 
         #region Fraction→他の型
         public static explicit operator Int8(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (Int8)integer;
         }
         public static explicit operator UInt8(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (UInt8)integer;
         }
         public static explicit operator Int16(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (Int16)integer;
         }
         public static explicit operator UInt16(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (UInt16)integer;
         }
         public static explicit operator Int32(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (Int32)integer;
         }
         public static explicit operator UInt32(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (UInt32)integer;
         }
         public static explicit operator Int64(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (Int64)integer;
         }
         public static explicit operator UInt64(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (UInt64)integer;
         }
         public static explicit operator Int128(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (Int128)integer;
         }
         public static explicit operator UInt128(Fraction value)
         {
-            var integer = (BigInteger)value;
+            var integer = (Integer)value;
             return (UInt128)integer;
         }
         public static explicit operator Float16(Fraction value)
@@ -245,7 +245,7 @@ namespace Ksnm.Numerics
             Decimal denominator = (Decimal)value.Denominator;
             return numerator / denominator;
         }
-        public static explicit operator BigInteger(Fraction value)
+        public static explicit operator Integer(Fraction value)
         {
             return value.Numerator / value.Denominator;
         }
@@ -253,26 +253,26 @@ namespace Ksnm.Numerics
 
         #endregion 型変換
 
-        public static BigFraction One => 1;
+        public static Fraction One => 1;
 
         public static int Radix => 2;
 
-        public static BigFraction Zero => 0;
+        public static Fraction Zero => 0;
 
-        public static BigFraction AdditiveIdentity => 0;
+        public static Fraction AdditiveIdentity => 0;
 
-        public static BigFraction MultiplicativeIdentity => 1;
+        public static Fraction MultiplicativeIdentity => 1;
 
-        public static BigFraction Abs(BigFraction value)
+        public static Fraction Abs(Fraction value)
         {
             return new Fraction(Integer.Abs(value.Numerator), Integer.Abs(value.Denominator));
         }
 
-        public static bool IsCanonical(BigFraction value) => true;
+        public static bool IsCanonical(Fraction value) => true;
 
-        public static bool IsComplexNumber(BigFraction value) => false;
+        public static bool IsComplexNumber(Fraction value) => false;
 
-        public static bool IsEvenInteger(BigFraction value)
+        public static bool IsEvenInteger(Fraction value)
         {
             value.Reduce();
             if (value.Denominator == 1 || value.Denominator == -1)
@@ -282,27 +282,27 @@ namespace Ksnm.Numerics
             return false;
         }
 
-        public static bool IsFinite(BigFraction value)
+        public static bool IsFinite(Fraction value)
         {
             return value.Denominator != 0;
         }
 
-        public static bool IsImaginaryNumber(BigFraction value) => false;
+        public static bool IsImaginaryNumber(Fraction value) => false;
 
-        public static bool IsInfinity(BigFraction value) => false;
+        public static bool IsInfinity(Fraction value) => false;
 
-        public static bool IsInteger(BigFraction value)
+        public static bool IsInteger(Fraction value)
         {
             value.Reduce();
             return (value.Denominator == 1 || value.Denominator == -1);
         }
 
-        public static bool IsNaN(BigFraction value)
+        public static bool IsNaN(Fraction value)
         {
             return value.Denominator == 0;
         }
 
-        public static bool IsNegative(BigFraction value)
+        public static bool IsNegative(Fraction value)
         {
             // 分母が0なら非数
             if (value.Denominator == 0)
@@ -323,11 +323,11 @@ namespace Ksnm.Numerics
             return Integer.IsNegative(value.Numerator) || Integer.IsNegative(value.Denominator);
         }
 
-        public static bool IsNegativeInfinity(BigFraction value) => false;
+        public static bool IsNegativeInfinity(Fraction value) => false;
 
-        public static bool IsNormal(BigFraction value) => value != 0;
+        public static bool IsNormal(Fraction value) => value != 0;
 
-        public static bool IsOddInteger(BigFraction value)
+        public static bool IsOddInteger(Fraction value)
         {
             value.Reduce();
             if (value.Denominator == 1 || value.Denominator == -1)
@@ -337,7 +337,7 @@ namespace Ksnm.Numerics
             return false;
         }
 
-        public static bool IsPositive(BigFraction value)
+        public static bool IsPositive(Fraction value)
         {
             // 分母が0なら非数
             if (value.Denominator == 0)
@@ -358,16 +358,16 @@ namespace Ksnm.Numerics
             return Integer.IsPositive(value.Numerator) && Integer.IsPositive(value.Denominator);
         }
 
-        public static bool IsPositiveInfinity(BigFraction value) => false;
+        public static bool IsPositiveInfinity(Fraction value) => false;
 
-        public static bool IsRealNumber(BigFraction value)
+        public static bool IsRealNumber(Fraction value)
         {
             return value.Denominator != 0;
         }
 
-        public static bool IsSubnormal(BigFraction value) => false;
+        public static bool IsSubnormal(Fraction value) => false;
 
-        public static bool IsZero(BigFraction value)
+        public static bool IsZero(Fraction value)
         {
             if (value.Denominator == 0)
             {
@@ -376,10 +376,10 @@ namespace Ksnm.Numerics
             return value.Numerator.IsZero;
         }
 
-        public static BigFraction MaxMagnitude(BigFraction x, BigFraction y)
+        public static Fraction MaxMagnitude(Fraction x, Fraction y)
         {
-            BigFraction ax = Abs(x);
-            BigFraction ay = Abs(y);
+            Fraction ax = Abs(x);
+            Fraction ay = Abs(y);
 
             if (ax > ay)
             {
@@ -394,12 +394,12 @@ namespace Ksnm.Numerics
             return y;
         }
 
-        public static BigFraction MaxMagnitudeNumber(BigFraction x, BigFraction y)
+        public static Fraction MaxMagnitudeNumber(Fraction x, Fraction y)
         {
             return MaxMagnitude(x, y);
         }
 
-        public static BigFraction MinMagnitude(BigFraction x, BigFraction y)
+        public static Fraction MinMagnitude(Fraction x, Fraction y)
         {
             Fraction ax = Abs(x);
             Fraction ay = Abs(y);
@@ -417,54 +417,54 @@ namespace Ksnm.Numerics
             return y;
         }
 
-        public static BigFraction MinMagnitudeNumber(BigFraction x, BigFraction y)
+        public static Fraction MinMagnitudeNumber(Fraction x, Fraction y)
         {
             return MinMagnitude(x, y);
         }
 
-        public static BigFraction Parse(string s)
+        public static Fraction Parse(string s)
         {
             var temp = Zero;
             string slash = "/";
             var texts = s.Split(slash);
             if (texts.Length == 1)
             {
-                temp.Numerator = BigInteger.Parse(texts[0]);
+                temp.Numerator = Integer.Parse(texts[0]);
             }
             else if (texts.Length >= 2)
             {
-                temp.Numerator = BigInteger.Parse(texts[0]);
-                temp.Denominator = BigInteger.Parse(texts[1]);
+                temp.Numerator = Integer.Parse(texts[0]);
+                temp.Denominator = Integer.Parse(texts[1]);
             }
             return temp;
         }
 
-        public static BigFraction Parse(string s, NumberFormatInfo numberFormatInfo)
+        public static Fraction Parse(string s, NumberFormatInfo numberFormatInfo)
         {
             return Parse(s);
         }
 
-        public static BigFraction Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
+        public static Fraction Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
         {
             return Parse(s.ToString());
         }
 
-        public static BigFraction Parse(string s, NumberStyles style, IFormatProvider? provider)
+        public static Fraction Parse(string s, NumberStyles style, IFormatProvider? provider)
         {
             return Parse(s);
         }
 
-        public static BigFraction Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
+        public static Fraction Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
         {
             return Parse(s.ToString());
         }
 
-        public static BigFraction Parse(string s, IFormatProvider? provider)
+        public static Fraction Parse(string s, IFormatProvider? provider)
         {
             return Parse(s);
         }
 
-        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
+        public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out Fraction result)
         {
             try
             {
@@ -478,7 +478,7 @@ namespace Ksnm.Numerics
             }
         }
 
-        public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
+        public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out Fraction result)
         {
             if (s == null)
             {
@@ -497,23 +497,23 @@ namespace Ksnm.Numerics
             }
         }
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out Fraction result)
         {
             return TryParse(s, NumberStyles.Number, provider, out result);
         }
 
-        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out BigFraction result)
+        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Fraction result)
         {
             return TryParse(s, NumberStyles.Number, provider, out result);
         }
 
-        static bool INumberBase<BigFraction>.TryConvertFromChecked<TOther>(TOther value, out BigFraction result)
+        static bool INumberBase<Fraction>.TryConvertFromChecked<TOther>(TOther value, out Fraction result)
         {
             return TryConvertFromChecked(value, out result);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool TryConvertFromChecked<TOther>(TOther value, out BigFraction result)
+        private static bool TryConvertFromChecked<TOther>(TOther value, out Fraction result)
             where TOther : INumberBase<TOther>
         {
             if (typeof(TOther) == typeof(byte))
@@ -565,17 +565,17 @@ namespace Ksnm.Numerics
             }
         }
 
-        static bool INumberBase<BigFraction>.TryConvertFromSaturating<TOther>(TOther value, out BigFraction result)
+        static bool INumberBase<Fraction>.TryConvertFromSaturating<TOther>(TOther value, out Fraction result)
         {
             return TryConvertFrom(value, out result);
         }
 
-        static bool INumberBase<BigFraction>.TryConvertFromTruncating<TOther>(TOther value, out BigFraction result)
+        static bool INumberBase<Fraction>.TryConvertFromTruncating<TOther>(TOther value, out Fraction result)
         {
             return TryConvertFrom(value, out result);
         }
 
-        private static bool TryConvertFrom<TOther>(TOther value, out BigFraction result)
+        private static bool TryConvertFrom<TOther>(TOther value, out Fraction result)
             where TOther : INumberBase<TOther>
         {
             if (typeof(TOther) == typeof(byte))
@@ -628,7 +628,7 @@ namespace Ksnm.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool INumberBase<BigFraction>.TryConvertToChecked<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+        static bool INumberBase<Fraction>.TryConvertToChecked<TOther>(Fraction value, [MaybeNullWhen(false)] out TOther result)
         {
             if (typeof(TOther) == typeof(double))
             {
@@ -691,17 +691,17 @@ namespace Ksnm.Numerics
             }
         }
 
-        static bool INumberBase<BigFraction>.TryConvertToSaturating<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+        static bool INumberBase<Fraction>.TryConvertToSaturating<TOther>(Fraction value, [MaybeNullWhen(false)] out TOther result)
         {
             return TryConvertTo(value, out result);
         }
 
-        static bool INumberBase<BigFraction>.TryConvertToTruncating<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+        static bool INumberBase<Fraction>.TryConvertToTruncating<TOther>(Fraction value, [MaybeNullWhen(false)] out TOther result)
         {
             return TryConvertTo(value, out result);
         }
 
-        private static bool TryConvertTo<TOther>(BigFraction value, [MaybeNullWhen(false)] out TOther result)
+        private static bool TryConvertTo<TOther>(Fraction value, [MaybeNullWhen(false)] out TOther result)
             where TOther : INumberBase<TOther>
         {
             if (typeof(TOther) == typeof(double))
@@ -776,14 +776,14 @@ namespace Ksnm.Numerics
             {
                 return 1;
             }
-            if (!(obj is BigFraction))
+            if (!(obj is Fraction))
             {
                 throw new ArgumentException();
             }
-            return CompareTo((BigFraction)obj);
+            return CompareTo((Fraction)obj);
         }
 
-        public int CompareTo(BigFraction other)
+        public int CompareTo(Fraction other)
         {
             var numerator = this.Numerator;// インスタンスの値を変更しないようにthisのは複製
             numerator *= other.Denominator;
@@ -791,7 +791,7 @@ namespace Ksnm.Numerics
             return numerator.CompareTo(other.Numerator);
         }
 
-        public bool Equals(BigFraction other)
+        public bool Equals(Fraction other)
         {
             var numerator = Numerator;// インスタンスの値を変更しないようにthisのは複製
             numerator *= other.Denominator;
@@ -821,7 +821,7 @@ namespace Ksnm.Numerics
             }
         }
 
-        public static BigFraction operator +(BigFraction value)
+        public static Fraction operator +(Fraction value)
         {
             return value;
         }
@@ -831,7 +831,7 @@ namespace Ksnm.Numerics
             return new Fraction(~value.Numerator, ~value.Denominator);
         }
 
-        public static BigFraction operator +(BigFraction left, BigFraction right)
+        public static Fraction operator +(Fraction left, Fraction right)
         {
             var temp = new Fraction();
             if (right.Denominator == left.Denominator)
@@ -848,12 +848,12 @@ namespace Ksnm.Numerics
             return temp;
         }
 
-        public static BigFraction operator -(BigFraction value)
+        public static Fraction operator -(Fraction value)
         {
-            return new BigFraction(-value.Numerator, value.Denominator);
+            return new Fraction(-value.Numerator, value.Denominator);
         }
 
-        public static BigFraction operator -(BigFraction left, BigFraction right)
+        public static Fraction operator -(Fraction left, Fraction right)
         {
             var temp = new Fraction();
             if (right.Denominator == left.Denominator)
@@ -870,17 +870,17 @@ namespace Ksnm.Numerics
             return temp;
         }
 
-        public static BigFraction operator ++(BigFraction value)
+        public static Fraction operator ++(Fraction value)
         {
-            return new BigFraction(value.Numerator + 1, value.Denominator);
+            return new Fraction(value.Numerator + 1, value.Denominator);
         }
 
-        public static BigFraction operator --(BigFraction value)
+        public static Fraction operator --(Fraction value)
         {
-            return new BigFraction(value.Numerator - 1, value.Denominator);
+            return new Fraction(value.Numerator - 1, value.Denominator);
         }
 
-        public static BigFraction operator *(BigFraction left, BigFraction right)
+        public static Fraction operator *(Fraction left, Fraction right)
         {
             var temp = new Fraction();
             temp.Numerator = left.Numerator * right.Numerator;
@@ -889,7 +889,7 @@ namespace Ksnm.Numerics
             return temp;
         }
 
-        public static BigFraction operator /(BigFraction left, BigFraction right)
+        public static Fraction operator /(Fraction left, Fraction right)
         {
             var temp = new Fraction();
             temp.Numerator = left.Numerator * right.Denominator;
@@ -898,17 +898,17 @@ namespace Ksnm.Numerics
             return temp;
         }
 
-        public static BigFraction operator %(BigFraction left, BigFraction right)
+        public static Fraction operator %(Fraction left, Fraction right)
         {
             return 0;
         }
 
-        public static bool operator ==(BigFraction left, BigFraction right)
+        public static bool operator ==(Fraction left, Fraction right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(BigFraction left, BigFraction right)
+        public static bool operator !=(Fraction left, Fraction right)
         {
             // どちらかがNaNならfalse
             if (IsNaN(left) || IsNaN(right))
@@ -918,27 +918,27 @@ namespace Ksnm.Numerics
             return !left.Equals(right);
         }
 
-        public static bool operator <(BigFraction left, BigFraction right)
+        public static bool operator <(Fraction left, Fraction right)
         {
             return left.Numerator * right.Denominator < right.Numerator * left.Denominator;
         }
 
-        public static bool operator >(BigFraction left, BigFraction right)
+        public static bool operator >(Fraction left, Fraction right)
         {
             return left.Numerator * right.Denominator > right.Numerator * left.Denominator;
         }
 
-        public static bool operator <=(BigFraction left, BigFraction right)
+        public static bool operator <=(Fraction left, Fraction right)
         {
             return left.Numerator * right.Denominator <= right.Numerator * left.Denominator;
         }
 
-        public static bool operator >=(BigFraction left, BigFraction right)
+        public static bool operator >=(Fraction left, Fraction right)
         {
             return left.Numerator * right.Denominator >= right.Numerator * left.Denominator;
         }
 
-        public static bool Equals(in BigFraction objA, in BigFraction objB)
+        public static bool Equals(in Fraction objA, in Fraction objB)
         {
             // どちらかがNaNならfalse
             if (IsNaN(objA) || IsNaN(objB))
@@ -954,11 +954,11 @@ namespace Ksnm.Numerics
             {
                 return false;
             }
-            if (!(obj is BigFraction))
+            if (!(obj is Fraction))
             {
                 throw new ArgumentException();
             }
-            return Equals((BigFraction)obj);
+            return Equals((Fraction)obj);
         }
 
         public override int GetHashCode()
