@@ -6,9 +6,9 @@ Console.WriteLine("Sqrt");
 
 for (int i = 0; i < 10; i++)
 {
-    var result = BigFraction.Sqrt(2, i);
+    var result = Ksnm.Numerics.Math.Sqrt<BigFraction>(2, i);
     var resultD = (BigDecimal)result;
-    Console.WriteLine($"{i}:√{2}={result}\n={resultD}");
+    Console.WriteLine($"{i}:\n√{2}\n={result}\n={resultD}");
 }
 
 #if false
