@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ksnm.Numerics
 {
@@ -23,7 +16,7 @@ namespace Ksnm.Numerics
     /// <summary>
     /// 任意精度の分数型
     /// </summary>
-    public struct BigFraction : INumber<Fraction>
+    public struct BigFraction : INumber<Fraction>, ISignedNumber<Fraction>
     {
         #region フィールド
         #endregion フィールド
@@ -314,6 +307,8 @@ namespace Ksnm.Numerics
         public static Fraction AdditiveIdentity => 0;
 
         public static Fraction MultiplicativeIdentity => 1;
+
+        public static Fraction NegativeOne => -1;
 
         public static Fraction Abs(Fraction value)
         {

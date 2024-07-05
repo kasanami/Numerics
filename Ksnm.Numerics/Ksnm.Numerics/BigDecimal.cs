@@ -4,14 +4,13 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using static System.Diagnostics.Debug;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ksnm.Numerics
 {
     /// <summary>
     /// 任意精度の符号付き10進数
     /// </summary>
-    public struct BigDecimal : INumber<BigDecimal>
+    public struct BigDecimal : INumber<BigDecimal>, ISignedNumber<BigDecimal>
     {
         #region 定数
 
@@ -36,6 +35,8 @@ namespace Ksnm.Numerics
         /// 負の 1 (-1) を表します。
         /// </summary>
         public static BigDecimal MinusOne => -1;
+
+        public static BigDecimal NegativeOne => -1;
 
         /// <summary>
         /// MinExponentの初期値
