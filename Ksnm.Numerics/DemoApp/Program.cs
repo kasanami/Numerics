@@ -1,8 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Ksnm.Numerics;
 using System.Numerics;
+using Float16 = System.Half;
+using Float32 = float;
+using Float64 = double;
 
 Console.WriteLine("Sqrt");
+
+#if false
+
+Console.WriteLine("√の計算");
 
 for (int i = 0; i < 10; i++)
 {
@@ -10,6 +17,47 @@ for (int i = 0; i < 10; i++)
     var resultD = (BigDecimal)result;
     Console.WriteLine($"{i}:\n√{2}\n={result}\n={resultD}");
 }
+
+#endif
+
+Console.WriteLine();
+Console.WriteLine("定数のネイピア数");
+{
+    Console.WriteLine($"{nameof(Float16)}={Float16.E.ToString()}");
+    Console.WriteLine($"{nameof(Float32)}={Float32.E.ToString()}");
+    Console.WriteLine($"{nameof(Float64)}={Float64.E.ToString()}");
+    var bigDecimal = (BigDecimal)BigFraction.E;
+    Console.WriteLine($"{nameof(BigFraction)}={bigDecimal.ToString()}");
+}
+Console.WriteLine("定数の円周率");
+{
+    Console.WriteLine($"{nameof(Float16)}={Float16.Pi.ToString()}");
+    Console.WriteLine($"{nameof(Float32)}={Float32.Pi.ToString()}");
+    Console.WriteLine($"{nameof(Float64)}={Float64.Pi.ToString()}");
+    var bigDecimal = (BigDecimal)BigFraction.Pi;
+    Console.WriteLine($"{nameof(BigFraction)}={bigDecimal.ToString()}");
+}
+{
+    Console.WriteLine($"{nameof(Float16)}={Float16.Tau.ToString()}");
+    Console.WriteLine($"{nameof(Float32)}={Float32.Tau.ToString()}");
+    Console.WriteLine($"{nameof(Float64)}={Float64.Tau.ToString()}");
+    var bigDecimal = (BigDecimal)BigFraction.Tau;
+    Console.WriteLine($"{nameof(BigFraction)}={bigDecimal.ToString()}");
+}
+
+Console.WriteLine();
+Console.WriteLine("円周率の計算");
+
+Console.WriteLine("マチンの公式");
+
+for (int i = 0; i < 10; i++)
+{
+    var result = Ksnm.Numerics.Math.MachinsFormula<BigFraction>(i) * 4;
+    var resultD = (BigDecimal)result;
+    Console.WriteLine($"{i}:PI\n={result.ToString()}\n={resultD}");
+}
+
+
 
 #if false
 BigDecimal a = BigDecimal.Parse("4951760157141521");

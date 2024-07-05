@@ -10,7 +10,10 @@ namespace Ksnm.Numerics
     /// <summary>
     /// 任意精度の符号付き10進数
     /// </summary>
-    public struct BigDecimal : INumber<BigDecimal>, ISignedNumber<BigDecimal>
+    public struct BigDecimal :
+        INumber<BigDecimal>,
+        ISignedNumber<BigDecimal>,
+        IFloatingPointConstants<BigDecimal>
     {
         #region 定数
 
@@ -1028,6 +1031,21 @@ namespace Ksnm.Numerics
         public static BigDecimal AdditiveIdentity => Zero;
 
         public static BigDecimal MultiplicativeIdentity => One;
+        /// <summary>
+        /// ネイピア数・自然対数の底（四捨五入済み小数点以下100桁）
+        /// * 105桁の場合:2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274_27466
+        /// </summary>
+        public static BigDecimal E => BigDecimal.Parse("2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274");
+        /// <summary>
+        /// 円周率（四捨五入済み小数点以下100桁）
+        /// * 105桁の場合:3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679_82148
+        /// </summary>
+        public static BigDecimal Pi => BigDecimal.Parse("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170680");
+        /// <summary>
+        /// 円周率*2（四捨五入済み小数点以下100桁）
+        /// * 105桁の場合:6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359_64296
+        /// </summary>
+        public static BigDecimal Tau => BigDecimal.Parse("6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341360");
 
         public static BigDecimal Abs(BigDecimal value)
         {
