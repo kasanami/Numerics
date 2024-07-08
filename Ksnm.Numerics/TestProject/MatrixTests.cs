@@ -102,7 +102,30 @@ namespace TestProject
                 b[0, 1] = 3;
                 b[1, 0] = 6;
                 b[1, 1] = 9;
-                actual = a*b;
+                actual = a * b;
+                Assert.AreEqual(expected, actual);
+            }
+            // *
+            {
+                expected = new Matrix<int>(1, 2);
+                actual = new Matrix<int>(expected);
+                a = new Matrix<int>(1, 3);
+                b = new Matrix<int>(3, 2);
+
+                expected[0, 0] = 62;
+                expected[0, 1] = 38;
+
+                a[0, 0] = 2;
+                a[0, 1] = 4;
+                a[0, 2] = 6;
+
+                b[0, 0] = 7;
+                b[0, 1] = 5;
+                b[1, 0] = 3;
+                b[1, 1] = 4;
+                b[2, 0] = 6;
+                b[2, 1] = 2;
+                actual = a * b;
                 Assert.AreEqual(expected, actual);
             }
         }
