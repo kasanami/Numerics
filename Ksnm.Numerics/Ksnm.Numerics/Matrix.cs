@@ -13,16 +13,11 @@ namespace Ksnm.Numerics
 {
     public class Matrix<TValue> :
         IAdditionOperators<Matrix<TValue>, Matrix<TValue>, Matrix<TValue>>,
-        IAdditiveIdentity<Matrix<TValue>, Matrix<TValue>>,
         ISubtractionOperators<Matrix<TValue>, Matrix<TValue>, Matrix<TValue>>,
-        IMultiplyOperators<Matrix<TValue>, Matrix<TValue>, Matrix<TValue>>,
-        IMultiplicativeIdentity<Matrix<TValue>, Matrix<TValue>>
+        IMultiplyOperators<Matrix<TValue>, Matrix<TValue>, Matrix<TValue>>
         where TValue : INumber<TValue>
     {
         #region 定数
-        public static Matrix<TValue> AdditiveIdentity => throw new NotImplementedException();
-
-        public static Matrix<TValue> MultiplicativeIdentity => throw new NotImplementedException();
 
         #endregion 定数
         /// <summary>
@@ -255,5 +250,6 @@ namespace Ksnm.Numerics
             return System.Math.Min(a, b);
         }
         #endregion private
+
     }
 }
