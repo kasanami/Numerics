@@ -5,7 +5,30 @@ using Float16 = System.Half;
 using Float32 = float;
 using Float64 = double;
 
-Console.WriteLine("Sqrt");
+Console.WriteLine();
+Console.WriteLine("累乗の計算");
+
+Console.WriteLine("base:2");
+for (decimal i = 1; i <= 10; i += 0.1m)
+{
+    var p = BigDecimal.Pow(2, i, 100);
+    Console.WriteLine($"{i}:{p}");
+}
+Console.WriteLine("base:10");
+for (decimal i = 1; i <= 10; i += 0.1m)
+{
+    var p = BigDecimal.Pow(10, i, 100);
+    Console.WriteLine($"{i}:{p}");
+}
+
+Console.WriteLine();
+Console.WriteLine("素数の計算");
+
+for (int i = 1; i < 100; i++)
+{
+    var p = Ksnm.Numerics.Math.Prime(i);
+    Console.WriteLine($"{i}:{p}");
+}
 
 #if false
 
@@ -56,7 +79,6 @@ for (int i = 0; i < 10; i++)
     var resultD = (BigDecimal)result;
     Console.WriteLine($"{i}:PI\n={result.ToString()}\n={resultD}");
 }
-
 
 
 #if false

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -13,7 +14,11 @@ namespace Ksnm.Numerics
     public struct BigDecimal :
         INumber<BigDecimal>,
         ISignedNumber<BigDecimal>,
-        IFloatingPointConstants<BigDecimal>
+        IFloatingPointConstants<BigDecimal>,
+        ITrigonometricFunctions<BigDecimal>,
+        IPowerFunctions<BigDecimal>,
+        ILogarithmicFunctions<BigDecimal>,
+        IExponentialFunctions<BigDecimal>
     {
         #region 定数
 
@@ -45,6 +50,10 @@ namespace Ksnm.Numerics
         /// MinExponentの初期値
         /// </summary>
         public const int DefaultMinExponent = -28;
+        /// <summary>
+        /// 精度の初期値
+        /// </summary>
+        public const int DefaultPrecision = -DefaultMinExponent;
         /// <summary>
         /// System.Decimal の指数の最小値
         /// ※System.Decimal 内では正数で保持しているが、この値は指数のため負の値とする。
@@ -78,6 +87,12 @@ namespace Ksnm.Numerics
         /// <para>精度とも言える</para>
         /// </summary>
         public int MinExponent { get; set; }
+        /// <summary>
+        /// 精度
+        /// <para>MinExponentの反数</para>
+        /// </summary>
+        public int Precision => -MinExponent;
+
         #endregion プロパティ
 
         #region コンストラクタ
@@ -2009,5 +2024,142 @@ namespace Ksnm.Numerics
 #endif
         }
         #endregion object
+
+        #region ITrigonometricFunctions
+
+        public static BigDecimal Acos(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal AcosPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Asin(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal AsinPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Atan(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal AtanPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Cos(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal CosPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Sin(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static (BigDecimal Sin, BigDecimal Cos) SinCos(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static (BigDecimal SinPi, BigDecimal CosPi) SinCosPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal SinPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Tan(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal TanPi(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion ITrigonometricFunctions
+
+        #region IPowerFunctions
+        public static BigDecimal Pow(BigDecimal value, BigDecimal exponent)
+        {
+            return Pow(value, exponent, DefaultPrecision);
+        }
+        public static BigDecimal Pow(BigDecimal value, BigDecimal exponent, int precision)
+        {
+            BigDecimal result = new BigDecimal(1, 0, -precision);
+            BigDecimal x = value - 1;
+            x.MinExponent = -precision;
+            BigDecimal term = 1;
+            int terms = int.CreateChecked(exponent);
+
+            for (int i = 1; i <= terms; i++)
+            {
+                term *= exponent * x / i;
+                exponent -= 1;
+                result += term;
+                if (exponent <= 0) { break; }
+            }
+            return result;
+        }
+        #endregion IPowerFunctions
+
+        #region ILogarithmicFunctions
+
+        public static BigDecimal Log(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Log(BigDecimal x, BigDecimal newBase)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Log10(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Log2(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion ILogarithmicFunctions
+
+        #region IExponentialFunctions
+        public static BigDecimal Exp(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Exp10(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static BigDecimal Exp2(BigDecimal x)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion IExponentialFunctions
     }
 }
