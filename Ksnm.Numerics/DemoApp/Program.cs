@@ -7,6 +7,7 @@ using Float64 = double;
 
 Console.WriteLine();
 {
+    var tolerance = 0.00000_00000_00000_00000_000001m;
     Console.WriteLine("Exp");
     Console.WriteLine("decimal");
     Console.WriteLine("base:2");
@@ -21,7 +22,7 @@ Console.WriteLine();
     Console.WriteLine("decimal");
     for (decimal i = 1; i <= 10; i += 0.1m)
     {
-        var p = Ksnm.Math.NewtonRaphsonLog(i, 0.00000_00000_00000_00000_000001m);
+        var p = Ksnm.Math.NewtonRaphsonLog(i, tolerance);
         var p2 = System.Math.Log((double)i);
         Console.WriteLine($"value={i}\n{p}\n{p2}");
     }
@@ -31,30 +32,41 @@ Console.WriteLine();
     Console.WriteLine("base:2");
     for (decimal i = 1; i <= 10; i += 0.1m)
     {
-        var p = Ksnm.Math.Pow(2m, i);
+        var p = Ksnm.Math.Pow(2m, i, tolerance);
         var p2 = System.Math.Pow(2, (double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
+    Console.WriteLine("base:3");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = Ksnm.Math.Pow(3, i, tolerance);
+        var p2 = System.Math.Pow(3, (double)i);
         Console.WriteLine($"exp={i}\n{p}\n{p2}");
     }
     Console.WriteLine("base:10");
     for (decimal i = 1; i <= 10; i += 0.1m)
     {
-        var p = Ksnm.Math.Pow(10, i);
+        var p = Ksnm.Math.Pow(10, i, tolerance);
         var p2 = System.Math.Pow(10, (double)i);
         Console.WriteLine($"exp={i}\n{p}\n{p2}");
     }
-
-    Console.WriteLine("BigDecimal");
+}
+Console.WriteLine("BigDecimal ========================================");
+{
+    BigDecimal tolerance = new BigDecimal(1, -100);
+    BigDecimal baseValue = new BigDecimal(2, 0, -100);
     Console.WriteLine("base:2");
     for (decimal i = 1; i <= 10; i += 0.1m)
     {
-        var p = BigDecimal.Pow(2, i, 100);
+        var p = Ksnm.Math.Pow(baseValue, i, tolerance);
         var p2 = System.Math.Pow(2, (double)i);
         Console.WriteLine($"exp={i}\n{p}\n{p2}");
     }
+    baseValue = new BigDecimal(10, 0, -100);
     Console.WriteLine("base:10");
     for (decimal i = 1; i <= 10; i += 0.1m)
     {
-        var p = BigDecimal.Pow(10, i, 100);
+        var p = Ksnm.Math.Pow(baseValue, i, tolerance);
         var p2 = System.Math.Pow(10, (double)i);
         Console.WriteLine($"exp={i}\n{p}\n{p2}");
     }

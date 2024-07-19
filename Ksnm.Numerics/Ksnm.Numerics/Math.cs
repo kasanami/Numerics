@@ -99,24 +99,47 @@ namespace Ksnm
             }
             return temp;
         }
-        public static T Pow<T>(T value, T exponent) where T : INumber<T>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseValue"></param>
+        /// <param name="exponent"></param>
+        /// <param name="tolerance">許容値</param>
+        /// <param name="terms">計算回数</param>
+        /// <returns></returns>
+        public static T Pow<T>(T baseValue, T exponent,T tolerance, int terms = 1000) where T : INumber<T>
         {
-#if true
-            var log = Log(value);
+#if false
+            // 誤差が大きいのでボツ
+            var log = Log(baseValue);
             var intermediate = exponent * log;
             return Exp(intermediate);
 #else
-            T result = T.One;
-            T x = value - T.One;
-            T term = T.One;
-            int terms = int.CreateChecked(exponent);
+            // 冪級数展開
 
-            for (int i = 1; i <= terms * 2; i++)
+            // baseValue が2より大きい場合は、1 に近くなるように変換
+            var _2 = T.CreateChecked(2);
+            if (baseValue > _2)
             {
-                term *= exponent * x / T.CreateChecked(i);
-                exponent -= T.One;
+                T factor = T.Zero;
+                while (baseValue > _2)
+                {
+                    baseValue /= _2;
+                    factor++;
+                }
+                T partialResult = Pow(baseValue, exponent, tolerance, terms);
+                return Pow(_2, factor * exponent, tolerance) * partialResult;
+            }
+            // baseValue を 1 + x に変換
+            T x = baseValue - T.One;
+            T result = T.One;
+            T term = T.One;
+            for (int n = 1; n <= terms; n++)
+            {
+                term *= (exponent - T.CreateChecked(n - 1)) / T.CreateChecked(n) * x;
                 result += term;
-                if (exponent <= T.Zero)
+                if (T.Abs(term) < tolerance)
                 {
                     break;
                 }

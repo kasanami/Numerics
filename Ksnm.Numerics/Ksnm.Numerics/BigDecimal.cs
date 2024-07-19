@@ -1719,43 +1719,103 @@ namespace Ksnm.Numerics
         {
             if (typeof(TOther) == typeof(byte))
             {
-                byte actualValue = (byte)(object)value;
+                var actualValue = (byte)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(sbyte))
+            {
+                var actualValue = (sbyte)(object)value;
                 result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(char))
             {
-                char actualValue = (char)(object)value;
+                var actualValue = (char)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(short))
+            {
+                var actualValue = (short)(object)value;
                 result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(ushort))
             {
-                ushort actualValue = (ushort)(object)value;
+                var actualValue = (ushort)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(int))
+            {
+                var actualValue = (int)(object)value;
                 result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(uint))
             {
-                uint actualValue = (uint)(object)value;
+                var actualValue = (uint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(long))
+            {
+                var actualValue = (long)(object)value;
                 result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(ulong))
             {
-                ulong actualValue = (ulong)(object)value;
+                var actualValue = (ulong)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Int128))
+            {
+                var actualValue = (Int128)(object)value;
                 result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(UInt128))
             {
-                UInt128 actualValue = (UInt128)(object)value;
+                var actualValue = (UInt128)(object)value;
                 result = checked((decimal)actualValue);
+                return true;
+            }
+            else if (typeof(TOther) == typeof(nint))
+            {
+                var actualValue = (nint)(object)value;
+                result = actualValue;
                 return true;
             }
             else if (typeof(TOther) == typeof(nuint))
             {
-                nuint actualValue = (nuint)(object)value;
+                var actualValue = (nuint)(object)value;
+                result = actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(Half))
+            {
+                var actualValue = (Half)(object)value;
+                result = (BigDecimal)actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(float))
+            {
+                var actualValue = (float)(object)value;
+                result = (BigDecimal)actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(double))
+            {
+                var actualValue = (double)(object)value;
+                result = (BigDecimal)actualValue;
+                return true;
+            }
+            else if (typeof(TOther) == typeof(decimal))
+            {
+                var actualValue = (decimal)(object)value;
                 result = actualValue;
                 return true;
             }
