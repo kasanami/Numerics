@@ -91,7 +91,11 @@ namespace Ksnm.Numerics
         /// 精度
         /// <para>MinExponentの反数</para>
         /// </summary>
-        public int Precision => -MinExponent;
+        public int Precision
+        {
+            get => -MinExponent;
+            set => MinExponent = -value;
+        }
 
         #endregion プロパティ
 

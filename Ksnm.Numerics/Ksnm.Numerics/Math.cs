@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
+using Ksnm.Numerics;
 using Microsoft.VisualBasic;
 
-namespace Ksnm.Numerics
+namespace Ksnm
 {
     public class Math
     {
@@ -97,17 +98,40 @@ namespace Ksnm.Numerics
             }
             return temp;
         }
-        static decimal Pow(decimal radix, decimal exponent, int terms)
+        public static T Pow<T>(T value, T exponent) where T : INumber<T>
         {
-            decimal result = 1;
-            decimal x = radix - 1;
-            decimal term = 1;
+            T result = T.One;
+            T x = value - T.One;
+            T term = T.One;
+            int terms = int.CreateChecked(exponent);
 
-            for (int i = 1; i <= terms; i++)
+            for (int i = 1; i <= terms * 2; i++)
             {
-                term *= exponent * x / i;
-                exponent -= 1;
+                term *= exponent * x / T.CreateChecked(i);
+                exponent -= T.One;
                 result += term;
+                if (exponent <= T.Zero)
+                {
+                    //break;
+                }
+            }
+            return result;
+        }
+
+        public static T Exp<T>(T value) where T : INumber<T>
+        {
+            //  x^0/0! + x^1/1! + x^2/2! + x^3/3! + ... + x^n/n! 
+            T result = T.One;// x^0/0!は最初から設定
+            T term = T.One;
+            // 毎回べき乗と階乗をするのではなく、前回の値にかける。
+            for (int i = 1; i < 100; i++)
+            {
+                term *= value / T.CreateChecked(i);
+                result += term;
+                if (term <= T.Zero)
+                {
+                    break;
+                }
             }
             return result;
         }
