@@ -6,47 +6,58 @@ using Float32 = float;
 using Float64 = double;
 
 Console.WriteLine();
-Console.WriteLine("累乗の計算");
+{
+    Console.WriteLine("Exp");
+    Console.WriteLine("decimal");
+    Console.WriteLine("base:2");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = Ksnm.Math.Exp(i);
+        var p2 = System.Math.Exp((double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
 
-Console.WriteLine("decimal");
-Console.WriteLine("base:2");
-for (decimal i = 1; i <= 10; i += 0.1m)
-{
-    var p = Ksnm.Math.Exp(i);
-    var p2 = System.Math.Exp((double)i);
-    Console.WriteLine($"exp={i}\n{p}\n{p2}");
-}
+    Console.WriteLine("Log");
+    Console.WriteLine("decimal");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = Ksnm.Math.NewtonRaphsonLog(i, 0.00000_00000_00000_00000_000001m);
+        var p2 = System.Math.Log((double)i);
+        Console.WriteLine($"value={i}\n{p}\n{p2}");
+    }
 
-Console.WriteLine("decimal");
-Console.WriteLine("base:2");
-for (decimal i = 1; i <= 10; i += 0.1m)
-{
-    var p = Ksnm.Math.Pow(2m, i);
-    var p2 = System.Math.Pow(2, (double)i);
-    Console.WriteLine($"exp={i}\n{p}\n{p2}");
-}
-Console.WriteLine("base:10");
-for (decimal i = 1; i <= 10; i += 0.1m)
-{
-    var p = Ksnm.Math.Pow(10, i);
-    var p2 = System.Math.Pow(10, (double)i);
-    Console.WriteLine($"exp={i}\n{p}\n{p2}");
-}
+    Console.WriteLine("Pow");
+    Console.WriteLine("decimal");
+    Console.WriteLine("base:2");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = Ksnm.Math.Pow(2m, i);
+        var p2 = System.Math.Pow(2, (double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
+    Console.WriteLine("base:10");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = Ksnm.Math.Pow(10, i);
+        var p2 = System.Math.Pow(10, (double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
 
-Console.WriteLine("BigDecimal");
-Console.WriteLine("base:2");
-for (decimal i = 1; i <= 10; i += 0.1m)
-{
-    var p = BigDecimal.Pow(2, i, 100);
-    var p2 = System.Math.Pow(2, (double)i);
-    Console.WriteLine($"exp={i}\n{p}\n{p2}");
-}
-Console.WriteLine("base:10");
-for (decimal i = 1; i <= 10; i += 0.1m)
-{
-    var p = BigDecimal.Pow(10, i, 100);
-    var p2 = System.Math.Pow(10, (double)i);
-    Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    Console.WriteLine("BigDecimal");
+    Console.WriteLine("base:2");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = BigDecimal.Pow(2, i, 100);
+        var p2 = System.Math.Pow(2, (double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
+    Console.WriteLine("base:10");
+    for (decimal i = 1; i <= 10; i += 0.1m)
+    {
+        var p = BigDecimal.Pow(10, i, 100);
+        var p2 = System.Math.Pow(10, (double)i);
+        Console.WriteLine($"exp={i}\n{p}\n{p2}");
+    }
 }
 
 Console.WriteLine();

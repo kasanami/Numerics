@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using Ksnm.Numerics;
 using Microsoft.VisualBasic;
@@ -100,6 +101,11 @@ namespace Ksnm
         }
         public static T Pow<T>(T value, T exponent) where T : INumber<T>
         {
+#if true
+            var log = Log(value);
+            var intermediate = exponent * log;
+            return Exp(intermediate);
+#else
             T result = T.One;
             T x = value - T.One;
             T term = T.One;
@@ -112,10 +118,11 @@ namespace Ksnm
                 result += term;
                 if (exponent <= T.Zero)
                 {
-                    //break;
+                    break;
                 }
             }
             return result;
+#endif
         }
 
         public static T Exp<T>(T value) where T : INumber<T>
@@ -179,6 +186,93 @@ namespace Ksnm
             return temp;
         }
         #endregion 階乗
+
+        #region 対数
+        /// <summary>
+        /// 自然対数
+        /// </summary>
+        /// <param name="value">対数を求める値</param>
+        /// <param name="terms">計算回数</param>
+        public static T Log<T>(T value, int terms = 1000) where T : INumber<T>
+        {
+            return TaylorLog(value, terms);
+        }
+        /// <summary>
+        /// テイラー級数展開を使った実装
+        /// </summary>
+        /// <param name="value">対数を求める値</param>
+        /// <param name="terms">計算回数</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static T TaylorLog<T>(T value, int terms = 1000) where T : INumber<T>
+        {
+            if (value <= T.Zero)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(value)}は正でなければならない");
+            }
+            if (value == T.One)
+            {
+                return T.Zero;
+            }
+            //  0 < x < 2 の範囲にする
+            T _2 = T.CreateChecked(2);
+            if (value > _2)
+            {
+                return TaylorLog(value / _2, terms) + TaylorLog(_2, terms);
+            }
+
+            T result = T.Zero;
+            T y = value - T.One;
+            T power = y;
+            for (int n = 1; n <= terms; n++)
+            {
+                if (n % 2 == 0)
+                {
+                    result -= power / T.CreateChecked(n);
+                }
+                else
+                {
+                    result += power / T.CreateChecked(n);
+                }
+                power *= y;
+            }
+            return result;
+        }
+        /// <summary>
+        /// ニュートン・ラフソン法を使った実装
+        /// </summary>
+        /// <param name="value">対数を求める値</param>
+        /// <param name="tolerance">許容値</param>
+        /// <param name="terms">計算回数</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="Exception"></exception>
+        public static T NewtonRaphsonLog<T>(T value, T tolerance, int terms = 100) where T : INumber<T>
+        {
+            if (value <= T.Zero)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(value)}は正でなければならない");
+            }
+            if (value == T.One)
+            {
+                return T.Zero;
+            }
+            // 最初の推論
+            T result = value - T.One > T.One ? value - T.One : value;
+            T before = T.Zero;
+            for (int i = 1; i < terms; i++)
+            {
+                T exp = Exp(result);
+                result = result - (exp - value) / exp;
+                // 差が許容値を下回ったら終了
+                if (T.Abs(before - result) < tolerance)
+                {
+                    return result;
+                }
+                before = result;
+            }
+            // 収束しなかった
+            throw new Exception("Newton-Raphson method did not converge");
+        }
+        #endregion 対数
 
         #region 三角関数
         /// <summary>
