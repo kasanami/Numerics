@@ -49,9 +49,11 @@ namespace Ksnm
         /// <summary>
         /// マチンの公式
         /// </summary>
-        /// <param name="count">計算回数。1未満を設定すると0を返す。</param>
+        /// <param name="tolerance">許容値</param>
+        /// <param name="terms">計算回数。1未満を設定すると0を返す。</param>
         /// <returns>PI/4(円周率の4分の1)</returns>
-        public static T MachinsFormula<T>(int count) where T : INumber<T>, ISignedNumber<T>
+        public static T MachinsFormula<T>(T tolerance, int terms = 1000)
+            where T : INumber<T>, ISignedNumber<T>
         {
             T _1 = T.One;
             T _2 = T.CreateChecked(2);
@@ -59,27 +61,33 @@ namespace Ksnm
             T _5 = T.CreateChecked(5);
             T _239 = T.CreateChecked(239);
             T sum = T.Zero;
-            for (int k = 1; k <= count; k++)
+            T before = T.Zero;
+            for (int k = 1; k <= terms; k++)
             {
                 var _k = T.CreateChecked(k);
                 var odd = 2 * k - 1;
                 var _odd = T.CreateChecked(odd);
-                sum +=
+                var add =
                     _4 *
                     (Pow<T>(T.NegativeOne, k + 1) / _odd) *
                     Pow<T>(_1 / _5, odd) +
                     (Pow<T>(T.NegativeOne, k) / _odd) *
                     Pow<T>(_1 / _239, odd);
+                sum += add;
+                if (T.Abs(add) < tolerance)
+                {
+                    break;
+                }
             }
             return sum;
         }
         /// <summary>
         /// べき乗
         /// </summary>
-        /// <param name="radix">底</param>
+        /// <param name="baseValue">底</param>
         /// <param name="exponent">指数</param>
         /// <returns></returns>
-        public static T Pow<T>(T radix, int exponent) where T : INumber<T>
+        public static T Pow<T>(T baseValue, int exponent) where T : INumber<T>
         {
             T temp = T.One;
             if (exponent < 0)
@@ -87,28 +95,28 @@ namespace Ksnm
                 exponent = -exponent;
                 for (int i = 0; i < exponent; i++)
                 {
-                    temp /= radix;
+                    temp /= baseValue;
                 }
             }
             else if (exponent > 0)
             {
                 for (int i = 0; i < exponent; i++)
                 {
-                    temp *= radix;
+                    temp *= baseValue;
                 }
             }
             return temp;
         }
         /// <summary>
-        /// 
+        /// べき乗
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseValue"></param>
-        /// <param name="exponent"></param>
+        /// <param name="baseValue">底</param>
+        /// <param name="exponent">指数</param>
         /// <param name="tolerance">許容値</param>
         /// <param name="terms">計算回数</param>
         /// <returns></returns>
-        public static T Pow<T>(T baseValue, T exponent,T tolerance, int terms = 1000) where T : INumber<T>
+        public static T Pow<T>(T baseValue, T exponent, T tolerance, int terms = 1000)
+            where T : INumber<T>
         {
 #if false
             // 誤差が大きいのでボツ
@@ -177,17 +185,18 @@ namespace Ksnm
             BigDecimal _n = n;
             BigDecimal _1 = 1;
             BigInteger sum = 0;
+            BigDecimal tolerance = new BigDecimal(1, -30);
             var iMax = System.Math.Pow(2, n);
             for (var i = 1; i <= iMax; i++)
             {
                 BigInteger sum2 = 0;
                 for (var j = 1; j <= i; j++)
                 {
-                    BigDecimal fraction = (Factorial(j - 1) + 1) / j;
-                    var cos = Math.Cos(fraction * BigDecimal.Pi);
-                    sum2 += BigInteger.CreateChecked(BigDecimal.Floor(cos * cos));
+                    BigDecimal fraction = (Factorial(j - 1) + 1) / (BigDecimal)j;
+                    var cos = Math.Cos(fraction * BigDecimal.Pi, tolerance);
+                    sum2 += BigDecimal.Floor(cos * cos).ToBigInteger();
                 }
-                sum += BigInteger.CreateChecked(BigDecimal.Floor(BigDecimal.Pow(_n / sum2, _1 / _n)));
+                sum += BigDecimal.Floor(BigDecimal.Pow(_n / sum2, _1 / _n)).ToBigInteger();
             }
             return 1 + sum;
         }
@@ -301,46 +310,50 @@ namespace Ksnm
         /// <summary>
         /// 指定された角度のサインを返します。
         /// </summary>
-        /// <param name="x">ラジアンで表した角度。</param>
-        public static T Sin<T>(T x) where T : INumber<T>, IFloatingPointConstants<T>
-        {
-            // すべての組み合わせをテストしていないが、概ね25回目以降は結果が変わらない
-            return Sin(x, 25);
-        }
-        /// <summary>
-        /// 指定された角度のサインを返します。
-        /// </summary>
-        /// <param name="x">ラジアンで表した角度。</param>
-        /// <param name="count">計算回数。</param>
-        public static T Sin<T>(T x, int count) where T : INumber<T>, IFloatingPointConstants<T>
+        /// <param name="angle">ラジアンで表した角度</param>
+        /// <param name="tolerance">許容値</param>
+        /// <param name="terms">計算回数</param>
+        public static T Sin<T>(T angle, T tolerance, int terms = 1000)
+            where T : INumber<T>, IFloatingPointConstants<T>, IFloatingPoint<T>
         {
             // -2π～2πにする
-            x -= (x / (T.Tau)) * T.Tau;
-            T sum = x;
-            T t = x;
-            for (int n = 1; n <= count; n++)
+            if (angle < T.Tau || angle > T.Tau)
+            {
+                angle -= T.Floor(angle / (T.Tau)) * T.Tau;
+            }
+            T sum = angle;
+            T add = angle;
+            for (int n = 1; n <= terms; n++)
             {
                 var d = (n + n + 1) * (n + n);
-                t *= -(x * x) / T.CreateChecked(d);
-                sum += t;
+                add *= -(angle * angle) / T.CreateChecked(d);
+                sum += add;
+                if (T.Abs(add) < tolerance)
+                {
+                    break;
+                }
             }
             return sum;
         }
         /// <summary>
         /// 指定された角度のコサインを返します。
         /// </summary>
-        /// <param name="x">ラジアンで表した角度。</param>
-        public static T Cos<T>(T x) where T : INumber<T>, IFloatingPointConstants<T>
+        /// <param name="angle">ラジアンで表した角度。</param>
+        /// <param name="tolerance">許容値</param>
+        /// <param name="terms">計算回数</param>
+        public static T Cos<T>(T angle, T tolerance, int terms = 1000)
+            where T : INumber<T>, IFloatingPointConstants<T>, IFloatingPoint<T>
         {
-            return Sin(T.Pi / T.CreateChecked(2) - x);
+            return Sin(T.Pi / T.CreateChecked(2) - angle, tolerance, terms);
         }
         /// <summary>
         /// 指定された角度のタンジェントを返します。
         /// </summary>
-        /// <param name="x">ラジアンで表した角度。</param>
-        public static T Tan<T>(T x) where T : INumber<T>, IFloatingPointConstants<T>
+        /// <param name="angle">ラジアンで表した角度。</param>
+        public static T Tan<T>(T angle, T tolerance, int terms = 1000)
+            where T : INumber<T>, IFloatingPointConstants<T>, IFloatingPoint<T>
         {
-            return Sin(x) / Cos(x);
+            return Sin(angle, tolerance, terms) / Cos(angle, tolerance, terms);
         }
         /// <summary>
         /// サインが指定数となる角度を返します。
@@ -360,7 +373,7 @@ namespace Ksnm
         /// <returns>-π/2 ≤θ≤π/2 の、ラジアンで表した角度 θ。</returns>
         public static T Asin<T>(T x, int count) where T : INumber<T>, IFloatingPointConstants<T>
         {
-            var _2 = _2<T>();
+            var _2 = T.CreateChecked(2);
             if (x < -T.One || x > T.One)
             {
                 throw new ArgumentOutOfRangeException($"{nameof(x)}={x} が範囲外の値です。");
@@ -403,7 +416,8 @@ namespace Ksnm
         /// <returns>0 ≤θ≤π の、ラジアンで表した角度 θ。</returns>
         public static T Acos<T>(T x) where T : INumber<T>, IFloatingPointConstants<T>
         {
-            return T.Pi / _2<T>() - Asin(x);
+            var _2 = T.CreateChecked(2);
+            return T.Pi / _2 - Asin(x);
         }
         /// <summary>
         /// タンジェントが指定数となる角度を返します。
@@ -454,8 +468,8 @@ namespace Ksnm
             }
             return sum;
 #else
-            var _1 = _1<T>();
-            var _2 = _2<T>();
+            var _1 = T.One;
+            var _2 = T.CreateChecked(2);
             // 過去の積を再利用する
             T product = _1;
             int k = 1;
@@ -522,41 +536,19 @@ namespace Ksnm
             }
             else// x==0
             {
+                var _2 = T.CreateChecked(2);
                 if (y > T.Zero)
                 {
-                    return +(T.Pi / _2<T>());
+                    return +(T.Pi / _2);
                 }
                 else if (y < T.Zero)
                 {
-                    return -(T.Pi / _2<T>());
+                    return -(T.Pi / _2);
                 }
                 // y==0
                 return T.Zero;
             }
         }
         #endregion 三角関数
-
-        #region CreateCheckedの短縮
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _1<T>() where T : INumber<T> => T.CreateChecked(1);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _2<T>() where T : INumber<T> => T.CreateChecked(2);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _3<T>() where T : INumber<T> => T.CreateChecked(3);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _4<T>() where T : INumber<T> => T.CreateChecked(4);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _5<T>() where T : INumber<T> => T.CreateChecked(5);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _6<T>() where T : INumber<T> => T.CreateChecked(6);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _7<T>() where T : INumber<T> => T.CreateChecked(7);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _8<T>() where T : INumber<T> => T.CreateChecked(8);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _9<T>() where T : INumber<T> => T.CreateChecked(9);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T _10<T>() where T : INumber<T> => T.CreateChecked(10);
-        #endregion CreateCheckedの短縮
     }
 }

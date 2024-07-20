@@ -14,6 +14,7 @@ namespace Ksnm.Numerics
     public struct BigDecimal :
         INumber<BigDecimal>,
         ISignedNumber<BigDecimal>,
+        IFloatingPoint<BigDecimal>,
         IFloatingPointConstants<BigDecimal>,
         ITrigonometricFunctions<BigDecimal>,
         IPowerFunctions<BigDecimal>,
@@ -2225,5 +2226,47 @@ namespace Ksnm.Numerics
             throw new NotImplementedException();
         }
         #endregion IExponentialFunctions
+
+        #region IFloatingPoint
+        public int GetExponentByteCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetExponentShortestBitLength()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSignificandBitLength()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSignificandByteCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryWriteExponentBigEndian(Span<byte> destination, out int bytesWritten)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryWriteExponentLittleEndian(Span<byte> destination, out int bytesWritten)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion IFloatingPoint
     }
 }
