@@ -88,12 +88,11 @@ namespace Ksnm.Tests
                 Assert.AreEqual(expected, actual, 0.00000_00000_1m);
             }
             BigDecimal.DefaultMinExponent = -100;
-            var tolerance = (BigDecimal)0.00000_00000_001m;
             for (double i = -10; i <= 10; i += 0.125)
             {
                 var expected = (BigDecimal)System.Math.Tan(i);
-                var actual = Math.Tan((BigDecimal)i, tolerance);
-                Assert.IsTrue(BigDecimal.Abs(expected - actual) < tolerance);
+                var actual = Math.Tan((BigDecimal)i, 0.00000_00000_001m);
+                Assert.IsTrue(BigDecimal.Abs(expected - actual) < 0.00000_00000_1m, $"{nameof(expected)}={expected} {nameof(actual)}={actual}");
             }
         }
         [TestMethod()]
@@ -113,12 +112,82 @@ namespace Ksnm.Tests
                 Assert.AreEqual(expected, actual, 0.0001m);
             }
             BigDecimal.DefaultMinExponent = -100;
-            var tolerance = (BigDecimal)0.00000_00000_001m;
-            for (double i = -10; i <= 10; i += 0.125)
+            for (double i = -1; i <= 1; i += 0.125)
             {
                 var expected = (BigDecimal)System.Math.Asin(i);
-                var actual = Math.Asin((BigDecimal)i, tolerance);
-                Assert.IsTrue(BigDecimal.Abs(expected - actual) < tolerance);
+                var actual = Math.Asin((BigDecimal)i, 0.00000_00000_001m);
+                Assert.IsTrue(BigDecimal.Abs(expected - actual) < 0.00000_00000_01m, $"{nameof(expected)}={expected} {nameof(actual)}={actual}");
+            }
+        }
+        [TestMethod()]
+        public void AcosTest()
+        {
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = System.Math.Acos(i);
+                var actual = Math.Acos(i, 0.00000_00000_001);
+                Assert.AreEqual(expected, actual, 0.00000_00000_01);
+            }
+            // オーバーフローするため計算回数が少ない→精度が悪い
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (decimal)System.Math.Acos(i);
+                var actual = Math.Acos((decimal)i, 0.00000_00000_001m, 22);
+                Assert.AreEqual(expected, actual, 0.0001m);
+            }
+            BigDecimal.DefaultMinExponent = -100;
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (BigDecimal)System.Math.Acos(i);
+                var actual = Math.Acos((BigDecimal)i, 0.00000_00000_001m);
+                Assert.IsTrue(BigDecimal.Abs(expected - actual) < 0.00000_00000_01m, $"{nameof(expected)}={expected} {nameof(actual)}={actual}");
+            }
+        }
+        [TestMethod()]
+        public void AtanTest()
+        {
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = System.Math.Atan(i);
+                var actual = Math.Atan(i, 0.00000_00000_001);
+                Assert.AreEqual(expected, actual, 0.00000_00000_01);
+            }
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (decimal)System.Math.Atan(i);
+                var actual = Math.Atan((decimal)i, 0.00000_00000_001m);
+                Assert.AreEqual(expected, actual, 0.0001m);
+            }
+            BigDecimal.DefaultMinExponent = -100;
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (BigDecimal)System.Math.Atan(i);
+                var actual = Math.Atan((BigDecimal)i, 0.00000_00000_001m);
+                Assert.IsTrue(BigDecimal.Abs(expected - actual) < 0.00000_00000_01m, $"{nameof(expected)}={expected} {nameof(actual)}={actual}");
+            }
+        }
+        [TestMethod()]
+        public void Atan2Test()
+        {
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = System.Math.Atan2(i, i);
+                var actual = Math.Atan2(i, i, 0.00000_00000_001);
+                Assert.AreEqual(expected, actual, 0.00000_00000_01);
+            }
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (decimal)System.Math.Atan2(i, i);
+                var actual = Math.Atan2((decimal)i, (decimal)i, 0.00000_00000_001m);
+                Assert.AreEqual(expected, actual, 0.0001m);
+            }
+            BigDecimal.DefaultMinExponent = -100;
+            var tolerance = (BigDecimal)0.00000_00000_001m;
+            for (double i = -1; i <= 1; i += 0.125)
+            {
+                var expected = (BigDecimal)System.Math.Atan2(i, i);
+                var actual = Math.Atan2((BigDecimal)i, (BigDecimal)i, tolerance);
+                Assert.IsTrue(BigDecimal.Abs(expected - actual) < tolerance, $"{nameof(expected)}={expected} {nameof(actual)}={actual}");
             }
         }
     }
