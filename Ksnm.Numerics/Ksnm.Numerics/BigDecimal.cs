@@ -50,11 +50,15 @@ namespace Ksnm.Numerics
         /// <summary>
         /// MinExponentの初期値
         /// </summary>
-        public const int DefaultMinExponent = -28;
+        public static int DefaultMinExponent = -28;
         /// <summary>
-        /// 精度の初期値
+        /// 精度の初期値(DefaultMinExponentの反数)
         /// </summary>
-        public const int DefaultPrecision = -DefaultMinExponent;
+        public static int DefaultPrecision
+        {
+            get => -DefaultMinExponent;
+            set => DefaultMinExponent = -value;
+        }
         /// <summary>
         /// System.Decimal の指数の最小値
         /// ※System.Decimal 内では正数で保持しているが、この値は指数のため負の値とする。
@@ -339,7 +343,7 @@ namespace Ksnm.Numerics
         /// <param name="value">文字列</param>
         /// <param name="numberFormatInfo">小数点の文字情報</param>
         /// <param name="minExponent">精度を指定する。文字列のほうが精度が高い場合、高いほうの制度になる。</param>
-        public static BigDecimal Parse(string value, NumberFormatInfo numberFormatInfo, int minExponent = DefaultMinExponent)
+        public static BigDecimal Parse(string value, NumberFormatInfo numberFormatInfo, int minExponent)
         {
             var temp = Zero;
             temp.MinExponent = minExponent;
@@ -1150,7 +1154,7 @@ namespace Ksnm.Numerics
 
         public static BigDecimal Parse(string s, IFormatProvider? provider)
         {
-            return Parse(s, NumberFormatInfo.GetInstance(provider));
+            return Parse(s, NumberFormatInfo.GetInstance(provider), DefaultMinExponent);
         }
 
         public static int Sign(BigDecimal d)
